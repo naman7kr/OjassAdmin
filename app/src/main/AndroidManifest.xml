@@ -23,7 +23,10 @@
             tools:replace="screenOrientation" />
         <activity android:name=".MainActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".SearchActivity" />
+        <activity android:name=".DetailsActivity" />
+        <activity android:name=".EventsActivity" />
+        <activity android:name=".UsersDetailsActivity"></activity>
     </application>
 
 </manifest>

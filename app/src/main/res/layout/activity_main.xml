@@ -7,13 +7,43 @@
     android:layout_height="match_parent"
     tools:context="ojassadmin.nitjsr.in.ojassadmin.MainActivity">
 
-    <Button
-        android:textSize="18sp"
-        android:textAllCaps="false"
-        android:text="Search"
-        android:id="@+id/search"
+    <android.support.v7.widget.Toolbar
+        android:background="@color/toolbar_bg_color"
+        app:titleTextColor="#ffffff"
+        android:id="@+id/main_page_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_marginTop="50dp"
+        android:layout_below="@+id/main_page_toolbar"
         android:layout_centerHorizontal="true"
+        android:orientation="vertical"
         android:layout_width="200dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+
+        <Button
+            android:textColor="@color/btn_text_color"
+            android:background="@drawable/button_bg"
+            android:textSize="@dimen/btn_text_size"
+            android:textAllCaps="false"
+            android:text="Search"
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="45dp" />
+
+        <Button
+            android:textColor="@color/btn_text_color"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/button_bg"
+            android:textSize="@dimen/btn_text_size"
+            android:textAllCaps="false"
+            android:text="Events"
+            android:id="@+id/events"
+            android:layout_width="match_parent"
+            android:layout_height="45dp" />
+
+    </LinearLayout>
 
 </RelativeLayout>

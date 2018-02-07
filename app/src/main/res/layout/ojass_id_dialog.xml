@@ -5,35 +5,40 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
+        android:layout_marginTop="10dp"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
         android:id="@+id/layout"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="45dp">
-
-        <TextView
-            android:gravity="center_vertical"
-            android:textSize="20sp"
-            android:text="OJ"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
+        android:layout_height="wrap_content">
 
         <EditText
-            android:inputType="number"
+            android:inputType="text"
+            android:paddingLeft="5dp"
+            android:background="@drawable/dialog_edit_text_bg"
             android:hint="Enter Ojass ID"
             android:id="@+id/ojass_id"
             android:layout_width="match_parent"
             android:layout_height="50dp" />
 
+        <Button
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/btn_text_color"
+            android:background="@drawable/button_bg"
+            android:id="@+id/search_btn_ojass"
+            android:textSize="@dimen/btn_text_size"
+            android:textAllCaps="false"
+            android:text="Search"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/layout"
+            android:layout_width="200dp"
+            android:layout_height="45dp" />
+
     </LinearLayout>
 
-    <Button
-        android:id="@+id/search_btn_ojass"
-        android:textSize="20sp"
-        android:textAllCaps="false"
-        android:text="Search"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/layout"
-        android:layout_width="200dp"
-        android:layout_height="50dp" />
+
 
 </RelativeLayout>
