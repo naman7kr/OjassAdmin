@@ -58,12 +58,12 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             dialog.setContentView(R.layout.ojass_id_dialog);
             dialog.show();
 
-            final EditText editText=(EditText)dialog.findViewById(R.id.ojass_id);
-            Button button=(Button)dialog.findViewById(R.id.search_btn_ojass);
-            button.setOnClickListener(new View.OnClickListener() {
+            final EditText editTextOjass=(EditText)dialog.findViewById(R.id.ojass_id);
+            Button buttonOjass=(Button)dialog.findViewById(R.id.search_btn_ojass);
+            buttonOjass.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                        String ojassID=editText.getText().toString().trim();
+                        String ojassID=editTextOjass.getText().toString().trim();
                         if (!TextUtils.isEmpty(ojassID))
                         {
                             dialog.dismiss();
@@ -82,18 +82,18 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             dialog.show();
 
 
-            final EditText editText=(EditText)dialog.findViewById(R.id.email_id);
-            Button button=(Button)dialog.findViewById(R.id.search_btn_email);
-            button.setOnClickListener(new View.OnClickListener() {
+            final EditText editTextEmail=(EditText)dialog.findViewById(R.id.email_id);
+            Button buttonEmail=(Button)dialog.findViewById(R.id.search_btn_email);
+            buttonEmail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                        String emailID=editText.getText().toString().trim();
+                        String emailID=editTextEmail.getText().toString().trim();
                         if (!TextUtils.isEmpty(emailID))
                         {
                             dialog.dismiss();
                             Intent intent=new Intent(SearchActivity.this,UsersDetailsActivity.class);
-                            intent.putExtra("Number","2");
                             intent.putExtra("ID",emailID);
+                            intent.putExtra("Number","2");
                             startActivity(intent);
                         }
                     }

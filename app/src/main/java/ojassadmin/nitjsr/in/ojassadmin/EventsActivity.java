@@ -115,21 +115,14 @@ public class EventsActivity extends AppCompatActivity implements View.OnClickLis
             {
                 String ID;
                 progressDialog.dismiss();
-                if (isEventSelected==1)
-                {
-                    ID=result.getContents().toString();
-                    Intent intent=new Intent(EventsActivity.this,UsersDetailsActivity.class);
-                    intent.putExtra("ID",ID);
-                    intent.putExtra("Number","3");
-                    intent.putExtra("FLAG",1);
-                    intent.putExtra("eventKey",eventKey);
-                    intent.putExtra("eventSelected",eventSelected);
-                    startActivity(intent);
-                }
-                else
-                {
-                    Toast.makeText(EventsActivity.this, "Select an event", Toast.LENGTH_SHORT).show();
-                }
+                ID=result.getContents().toString();
+                Intent intent=new Intent(EventsActivity.this,UsersDetailsActivity.class);
+                intent.putExtra("ID",ID);
+                intent.putExtra("Number","3");
+                intent.putExtra("FLAG",1);
+                intent.putExtra("eventKey",eventKey);
+                intent.putExtra("eventSelected",eventSelected);
+                startActivity(intent);
             }
         }
         else
@@ -142,21 +135,25 @@ public class EventsActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         if (view.getId()==R.id.search_by_ojass_id_event)
         {
-            final Dialog dialog=new Dialog(EventsActivity.this);
-            dialog.setContentView(R.layout.ojass_id_dialog);
-            dialog.show();
+            if(isEventSelected==0)
+            {
+                Toast.makeText(this, "Select any event", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                final Dialog dialog=new Dialog(EventsActivity.this);
+                dialog.setContentView(R.layout.ojass_id_dialog);
+                dialog.show();
 
-            final EditText editText=(EditText)dialog.findViewById(R.id.ojass_id);
-            Button button=(Button)dialog.findViewById(R.id.search_btn_ojass);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String ojassID=editText.getText().toString().trim();
-                    if (!TextUtils.isEmpty(ojassID))
-                    {
-                        dialog.dismiss();
-                        if (isEventSelected==1)
+                final EditText editText=(EditText)dialog.findViewById(R.id.ojass_id);
+                Button button=(Button)dialog.findViewById(R.id.search_btn_ojass);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String ojassID=editText.getText().toString().trim();
+                        if (!TextUtils.isEmpty(ojassID))
                         {
+                            dialog.dismiss();
                             Intent intent=new Intent(EventsActivity.this,UsersDetailsActivity.class);
                             intent.putExtra("ID",ojassID);
                             intent.putExtra("Number","1");
@@ -165,32 +162,31 @@ public class EventsActivity extends AppCompatActivity implements View.OnClickLis
                             intent.putExtra("eventSelected",eventSelected);
                             startActivity(intent);
                         }
-                        else
-                        {
-                            Toast.makeText(EventsActivity.this, "Select an event", Toast.LENGTH_SHORT).show();
-                        }
                     }
-                }
-            });
+                });
+            }
         }
         if (view.getId()==R.id.search_by_email_event)
         {
-            final Dialog dialog=new Dialog(EventsActivity.this);
-            dialog.setContentView(R.layout.email_id_dialog);
-            dialog.show();
+            if (isEventSelected==0)
+            {
+                Toast.makeText(this, "Select any event", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                final Dialog dialog=new Dialog(EventsActivity.this);
+                dialog.setContentView(R.layout.email_id_dialog);
+                dialog.show();
 
-
-            final EditText editText=(EditText)dialog.findViewById(R.id.email_id);
-            Button button=(Button)dialog.findViewById(R.id.search_btn_email);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String emailID=editText.getText().toString().trim();
-                    if (!TextUtils.isEmpty(emailID))
-                    {
-                        dialog.dismiss();
-                        if (isEventSelected==1)
+                final EditText editText=(EditText)dialog.findViewById(R.id.email_id);
+                Button button=(Button)dialog.findViewById(R.id.search_btn_email);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String emailID=editText.getText().toString().trim();
+                        if (!TextUtils.isEmpty(emailID))
                         {
+                            dialog.dismiss();
                             Intent intent=new Intent(EventsActivity.this,UsersDetailsActivity.class);
                             intent.putExtra("Number","2");
                             intent.putExtra("ID",emailID);
@@ -199,17 +195,20 @@ public class EventsActivity extends AppCompatActivity implements View.OnClickLis
                             intent.putExtra("eventSelected",eventSelected);
                             startActivity(intent);
                         }
-                        else
-                        {
-                            Toast.makeText(EventsActivity.this, "Select an event", Toast.LENGTH_SHORT).show();
-                        }
                     }
-                }
-            });
+                });
+            }
         }
         if (view.getId()==R.id.search_by_qr_code_event)
         {
-            integrator.initiateScan();
+            if(isEventSelected==0)
+            {
+                Toast.makeText(this, "Select any event", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                integrator.initiateScan();
+            }
         }
     }
 }

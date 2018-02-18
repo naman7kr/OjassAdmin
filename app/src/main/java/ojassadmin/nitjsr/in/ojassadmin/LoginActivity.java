@@ -49,12 +49,6 @@ public class LoginActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
 
-        /*
-        if (sharedPrefManager.isLoggedIn())
-        {
-            moveToMainActivity();
-        }*/
-
         //Utilities.changeStatusBarColor(this);
 
         mAuth = FirebaseAuth.getInstance();
@@ -76,6 +70,13 @@ public class LoginActivity extends AppCompatActivity {
                 signIn();
             }
         });
+
+        /*
+        if (sharedPrefManager.isLoggedIn())
+        {
+            moveToMainActivity();
+        }
+        */
 
     }
 
