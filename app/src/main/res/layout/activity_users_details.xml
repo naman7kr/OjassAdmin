@@ -1,52 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<ScrollView
     android:id="@+id/user_details_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ojassadmin.nitjsr.in.ojassadmin.UsersDetailsActivity">
+    tools:context="ojassadmin.nitjsr.in.ojassadmin.UsersDetailsActivity"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/user_details_toolbar"
-        android:background="@color/toolbar_bg_color"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"></android.support.v7.widget.Toolbar>
-
-    <ScrollView
-        android:layout_below="@+id/user_details_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_margin="10dp"
+            android:padding="8dp"
             android:focusableInTouchMode="true">
 
-                <Button
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/add_user_to_event"
-                    android:textAllCaps="false"
-                    android:textSize="@dimen/btn_text_size"
-                    android:textColor="@color/btn_text_color"
-                    android:text="Add participant"
-                    android:background="@drawable/button_bg"
-                    android:layout_gravity="center"
-                    android:layout_width="200dp"
-                    android:layout_height="45dp" />
+            <Button
+                android:id="@+id/add_user_to_event"
+                android:textAllCaps="false"
+                android:textSize="@dimen/btn_text_size"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:text="Add participant"
+                android:background="@drawable/button_bg"
+                android:layout_gravity="center"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="10dp"/>
 
+            <ImageButton
+                android:id="@+id/ib_edit_profile"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="right"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:background="@android:color/transparent"
+                android:src="@android:drawable/ic_menu_edit"/>
+
+            <ImageView
+                android:id="@+id/iv_user_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                tools:background="@color/colorAccent"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp"/>
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingLeft="15dp"
+                android:layout_marginTop="10dp"
                 android:paddingRight="15dp">
 
                 <TextView
-                    android:textColor="@color/text_color"
                     android:textSize="16sp"
                     android:layout_weight="0.25"
                     android:layout_gravity="center_vertical"
@@ -55,7 +63,6 @@
                     android:text="Ojass ID" />
 
                 <EditText
-                    android:textColor="@color/text_color"
                     android:textSize="17sp"
                     android:layout_weight="0.75"
                     android:id="@+id/edit_text_user_ojass_id"
@@ -73,7 +80,6 @@
                 android:paddingRight="15dp">
 
                 <TextView
-                    android:textColor="@color/text_color"
                     android:textSize="16sp"
                     android:layout_gravity="center_vertical"
                     android:layout_width="0dp"
@@ -82,7 +88,6 @@
                     android:text="Name" />
 
                 <EditText
-                    android:textColor="@color/text_color"
                     android:textSize="17sp"
                     android:layout_gravity="center_vertical"
                     android:id="@+id/edit_text_user_name"
@@ -95,6 +100,7 @@
 
             <LinearLayout
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -102,7 +108,6 @@
                 android:paddingRight="15dp">
 
                 <TextView
-                    android:textColor="@color/text_color"
                     android:textSize="16sp"
                     android:layout_gravity="center_vertical"
                     android:layout_width="0dp"
@@ -111,7 +116,6 @@
                     android:text="Email" />
 
                 <TextView
-                    android:textColor="@color/text_color"
                     android:textSize="17sp"
                     android:gravity="center_vertical"
                     android:id="@+id/text_view_user_email"
@@ -132,7 +136,6 @@
                 android:paddingRight="15dp">
 
                 <TextView
-                    android:textColor="@color/text_color"
                     android:textSize="16sp"
                     android:gravity="center_vertical"
                     android:layout_width="0dp"
@@ -141,7 +144,6 @@
                     android:text="Phone" />
 
                 <TextView
-                    android:textColor="@color/text_color"
                     android:textSize="17sp"
                     android:gravity="center_vertical"
                     android:id="@+id/text_view_user_phone"
@@ -160,7 +162,6 @@
                 android:paddingRight="15dp">
 
                 <TextView
-                    android:textColor="@color/text_color"
                     android:textSize="16sp"
                     android:layout_gravity="center_vertical"
                     android:layout_width="0dp"
@@ -169,7 +170,6 @@
                     android:text="Institute" />
 
                 <EditText
-                    android:textColor="@color/text_color"
                     android:textSize="17sp"
                     android:layout_gravity="center_vertical"
                     android:id="@+id/edit_text_user_institute"
@@ -187,7 +187,6 @@
                 android:paddingRight="15dp">
 
                 <TextView
-                    android:textColor="@color/text_color"
                     android:textSize="16sp"
                     android:layout_gravity="center_vertical"
                     android:layout_width="0dp"
@@ -196,7 +195,6 @@
                     android:text="Reg. no." />
 
                 <EditText
-                    android:textColor="@color/text_color"
                     android:textSize="17sp"
                     android:layout_gravity="center_vertical"
                     android:id="@+id/edit_text_user_reg_no"
@@ -204,74 +202,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.75"
                     android:ems="10" />
-            </LinearLayout>
-
-            <RelativeLayout
-                android:paddingRight="15dp"
-                android:paddingLeft="8dp"
-                android:layout_width="fill_parent"
-                android:layout_height="45dp"
-                android:orientation="horizontal">
-
-                <CheckBox
-                    android:textColor="@color/text_color"
-                    android:id="@+id/checkbox_tshirt"
-                    android:layout_centerVertical="true"
-                    android:textSize="16sp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_gravity="center_vertical"
-                    android:text="T-shirt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <Spinner
-                    android:textColor="@color/text_color"
-                    android:background="@drawable/spinner_bg"
-                    android:layout_centerInParent="true"
-                    android:id="@+id/t_shirt_size_spinner"
-                    android:layout_width="150dp"
-                    android:layout_height="45dp"></Spinner>
-
-                <CheckBox
-                    android:textColor="@color/text_color"
-                    android:id="@+id/checkbox_kit"
-                    android:layout_centerVertical="true"
-                    android:textSize="16sp"
-                    android:layout_marginRight="25dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_gravity="center_vertical|end"
-                    android:text="Kit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="45dp"
-                android:orientation="horizontal"
-                android:paddingLeft="8dp"
-                android:paddingRight="15dp">
-
-                <CheckBox
-                    android:textColor="@color/text_color"
-                    android:textSize="16sp"
-                    android:layout_weight="0.20"
-                    android:layout_gravity="center_vertical"
-                    android:text="Payment"
-                    android:id="@+id/checkbox_payment"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
-
-                <EditText
-                    android:textColor="@color/text_color"
-                    android:textSize="17sp"
-                    android:layout_weight="0.55"
-                    android:layout_gravity="center_vertical"
-                    android:id="@+id/edit_text_user_payment"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"/>
             </LinearLayout>
 
             <LinearLayout
@@ -282,7 +212,57 @@
                 android:paddingRight="15dp">
 
                 <TextView
-                    android:textColor="@color/text_color"
+                    android:textSize="16sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.25"
+                    android:text="Branch" />
+
+                <EditText
+                    android:textSize="17sp"
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/edit_text_branch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.75"
+                    android:ems="10" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <TextView
+                    android:textSize="16sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.25"
+                    android:text="Amount" />
+
+                <EditText
+                    android:textSize="17sp"
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/edit_text_paid_amt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.75"
+                    android:ems="10" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <TextView
                     android:textSize="16sp"
                     android:layout_weight="0.25"
                     android:layout_width="0dp"
@@ -291,7 +271,6 @@
                     android:text="Remarks" />
 
                 <EditText
-                    android:textColor="@color/text_color"
                     android:textSize="17sp"
                     android:layout_gravity="center_vertical"
                     android:id="@+id/edit_text_user_remark"
@@ -302,23 +281,65 @@
             </LinearLayout>
 
             <LinearLayout
+                android:paddingRight="15dp"
+                android:paddingLeft="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:layout_weight="1"
+                    android:id="@+id/checkbox_kit"
+                    android:layout_centerVertical="true"
+                    android:textSize="16sp"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center_vertical"
+                    android:text="Kit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <CheckBox
+                    android:layout_weight="1"
+                    android:id="@+id/checkbox_tshirt"
+                    android:layout_centerVertical="true"
+                    android:textSize="16sp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_gravity="center_vertical"
+                    android:text="T-shirt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <Spinner
+                    android:layout_weight="1"
+                    android:background="@drawable/spinner_bg"
+                    android:layout_centerInParent="true"
+                    android:id="@+id/sp_tshirt_size"
+                    android:layout_width="0dp"
+                    android:entries="@array/tshirt_size"
+                    android:layout_height="45dp" />
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
                 android:layout_marginTop="10dp"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <Button
-                    android:textColor="@color/btn_text_color"
                     android:id="@+id/btn_edit_profile"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:background="@drawable/button_bg"
                     android:layout_marginRight="40dp"
                     android:layout_marginLeft="40dp"
                     android:textAllCaps="false"
                     android:textSize="@dimen/btn_text_size"
-                    android:text="Edit Profile"
+                    android:text="Update"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp" />
+                    android:layout_height="45dp" />
 
                 <Button
                     android:textColor="#ffffff"
@@ -329,15 +350,13 @@
                     android:layout_marginLeft="40dp"
                     android:textSize="@dimen/btn_text_size"
                     android:textAllCaps="false"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="45dp"
                     android:text="Register" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-
-    </ScrollView>
-
-</RelativeLayout>
+</ScrollView>

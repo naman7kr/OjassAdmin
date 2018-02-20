@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -28,9 +29,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_ADMIN;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_USERS;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -49,13 +50,22 @@ public class LoginActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
 
-        //Utilities.changeStatusBarColor(this);
+        sharedPrefManager = new SharedPrefManager(this);
+
+        if (sharedPrefManager.isLoggedIn()) {
+            if (sharedPrefManager.isRegistered()) moveToMainActivity();
+            else moveToRegisterActivity();
+        }
+
+        Picasso.with(this).load(R.drawable.login_bg).fit().into((ImageView)findViewById(R.id.login_screen));
 
         mAuth = FirebaseAuth.getInstance();
         pd = new ProgressDialog(this);
         pd.setTitle("Hang On");
         pd.setMessage("Connecting you to Mothership...");
         pd.setCancelable(false);
+
+
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -71,12 +81,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        /*
-        if (sharedPrefManager.isLoggedIn())
-        {
-            moveToMainActivity();
-        }
-        */
+
+
 
     }
 
@@ -103,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
-                            new SharedPrefManager(LoginActivity.this).setIsLoggedIn(true);
+                            sharedPrefManager.setIsLoggedIn(true);
                             isRegisteredUser();
                         } else {
                             if (pd.isShowing()) pd.dismiss();
@@ -132,11 +138,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
-                    new SharedPrefManager(LoginActivity.this).setIsRegistered(true);
+                    sharedPrefManager.setIsRegistered(true);
                     moveToMainActivity();
                     Toast.makeText(LoginActivity.this, "Welcome to Ojass Space Voyage Dashboard! "+fName, Toast.LENGTH_LONG).show();
                 } else {
-                    new SharedPrefManager(LoginActivity.this).setIsRegistered(false);
+                    sharedPrefManager.setIsRegistered(false);
                     moveToRegisterActivity();
                     Toast.makeText(LoginActivity.this, "Hey "+fName+"! Let us know you better.", Toast.LENGTH_LONG).show();
                 }

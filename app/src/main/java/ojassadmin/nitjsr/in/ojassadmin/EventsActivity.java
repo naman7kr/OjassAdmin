@@ -24,6 +24,16 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.util.HashMap;
 
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_EVENT_HASH;
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_EVENT_NAME;
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_SEARCH_FLAG;
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_SEARCH_ID;
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_SEARCH_SRC;
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.SEARCH_FLAG_EMAIL;
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.SEARCH_FLAG_OJ_ID;
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.SEARCH_FLAG_QR;
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.SRC_EVENT;
+
 public class EventsActivity extends AppCompatActivity implements View.OnClickListener{
 
     private Spinner spinner;
@@ -101,114 +111,47 @@ public class EventsActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        ProgressDialog progressDialog=new ProgressDialog(EventsActivity.this);
-        progressDialog.setTitle("Searching user");
-        progressDialog.setTitle("Please wait...");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null) {
             if(result.getContents() == null) {
                 Toast.makeText(EventsActivity.this, "Searching failed", Toast.LENGTH_LONG).show();
+            } else {
+                openUserDetail(result.getContents(), SEARCH_FLAG_QR);
             }
-            else
-            {
-                String ID;
-                progressDialog.dismiss();
-                ID=result.getContents().toString();
-                Intent intent=new Intent(EventsActivity.this,UsersDetailsActivity.class);
-                intent.putExtra("ID",ID);
-                intent.putExtra("Number","3");
-                intent.putExtra("FLAG",1);
-                intent.putExtra("eventKey",eventKey);
-                intent.putExtra("eventSelected",eventSelected);
-                startActivity(intent);
-            }
-        }
-        else
-        {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
+        } else super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     public void onClick(View view) {
-        if (view.getId()==R.id.search_by_ojass_id_event)
-        {
-            if(isEventSelected==0)
-            {
+        if (view.getId()==R.id.search_by_ojass_id_event) {
+            if(isEventSelected==0) {
                 Toast.makeText(this, "Select any event", Toast.LENGTH_SHORT).show();
+            } else {
+                String ojassID = ((EditText)findViewById(R.id.et_event_oj_id)).getText().toString().trim();
+                if (!TextUtils.isEmpty(ojassID)) openUserDetail(ojassID, SEARCH_FLAG_OJ_ID);
+                else Toast.makeText(this, "Field can't be left blank!", Toast.LENGTH_SHORT).show();
             }
-            else
-            {
-                final Dialog dialog=new Dialog(EventsActivity.this);
-                dialog.setContentView(R.layout.ojass_id_dialog);
-                dialog.show();
+        } else if (view.getId()==R.id.search_by_email_event) {
+            if (isEventSelected==0) {
+                Toast.makeText(this, "Select any event", Toast.LENGTH_SHORT).show();
+            } else {
+                String emailID = ((EditText)findViewById(R.id.et_event_email_id)).getText().toString().trim();
+                if (!TextUtils.isEmpty(emailID)) openUserDetail(emailID, SEARCH_FLAG_EMAIL);
+                else Toast.makeText(this, "Field can't be left blank!", Toast.LENGTH_SHORT).show();
+            }
+        } else if (view.getId()==R.id.search_by_qr_code_event) {
+            if(isEventSelected==0) Toast.makeText(this, "Select any event", Toast.LENGTH_SHORT).show();
+            else integrator.initiateScan();
+        }
+    }
 
-                final EditText editText=(EditText)dialog.findViewById(R.id.ojass_id);
-                Button button=(Button)dialog.findViewById(R.id.search_btn_ojass);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String ojassID=editText.getText().toString().trim();
-                        if (!TextUtils.isEmpty(ojassID))
-                        {
-                            dialog.dismiss();
-                            Intent intent=new Intent(EventsActivity.this,UsersDetailsActivity.class);
-                            intent.putExtra("ID",ojassID);
-                            intent.putExtra("Number","1");
-                            intent.putExtra("FLAG",1);
-                            intent.putExtra("eventKey",eventKey);
-                            intent.putExtra("eventSelected",eventSelected);
-                            startActivity(intent);
-                        }
-                    }
-                });
-            }
-        }
-        if (view.getId()==R.id.search_by_email_event)
-        {
-            if (isEventSelected==0)
-            {
-                Toast.makeText(this, "Select any event", Toast.LENGTH_SHORT).show();
-            }
-            else
-            {
-                final Dialog dialog=new Dialog(EventsActivity.this);
-                dialog.setContentView(R.layout.email_id_dialog);
-                dialog.show();
-
-                final EditText editText=(EditText)dialog.findViewById(R.id.email_id);
-                Button button=(Button)dialog.findViewById(R.id.search_btn_email);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String emailID=editText.getText().toString().trim();
-                        if (!TextUtils.isEmpty(emailID))
-                        {
-                            dialog.dismiss();
-                            Intent intent=new Intent(EventsActivity.this,UsersDetailsActivity.class);
-                            intent.putExtra("Number","2");
-                            intent.putExtra("ID",emailID);
-                            intent.putExtra("FLAG",1);
-                            intent.putExtra("eventKey",eventKey);
-                            intent.putExtra("eventSelected",eventSelected);
-                            startActivity(intent);
-                        }
-                    }
-                });
-            }
-        }
-        if (view.getId()==R.id.search_by_qr_code_event)
-        {
-            if(isEventSelected==0)
-            {
-                Toast.makeText(this, "Select any event", Toast.LENGTH_SHORT).show();
-            }
-            else
-            {
-                integrator.initiateScan();
-            }
-        }
+    private void openUserDetail(String ID, int FLAG){
+        Intent intent=new Intent(EventsActivity.this,UsersDetailsActivity.class);
+        intent.putExtra(INTENT_PARAM_SEARCH_FLAG, FLAG);
+        intent.putExtra(INTENT_PARAM_SEARCH_ID, ID);
+        intent.putExtra(INTENT_PARAM_SEARCH_SRC, SRC_EVENT);
+        intent.putExtra(INTENT_PARAM_EVENT_NAME, eventSelected);
+        intent.putExtra(INTENT_PARAM_EVENT_HASH, eventKey);
+        startActivity(intent);
     }
 }

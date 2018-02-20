@@ -26,7 +26,6 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="10dp"
-            android:textColor="@color/btn_text_color"
             android:background="@drawable/button_bg"
             android:id="@+id/search_btn_ojass"
             android:textSize="@dimen/btn_text_size"

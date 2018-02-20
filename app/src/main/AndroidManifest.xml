@@ -26,7 +26,14 @@
         <activity android:name=".SearchActivity" />
         <activity android:name=".DetailsActivity" />
         <activity android:name=".EventsActivity" />
-        <activity android:name=".UsersDetailsActivity"></activity>
+        <activity
+            android:name=".UsersDetailsActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".NotificationActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".AdminDetailsActivity"
+            android:windowSoftInputMode="stateHidden"/>
     </application>
 
 </manifest>
