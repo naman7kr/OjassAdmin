@@ -67,7 +67,7 @@ public class NotificationActivity extends AppCompatActivity implements View.OnCl
         String topic = spChannel.getSelectedItem().toString();
         if(!TextUtils.isEmpty(etTitle.getText()) && !TextUtils.isEmpty(etBody.getText())) {
             FeedModel d = new FeedModel(etTitle.getText().toString(), etBody.getText().toString());
-            notiRef.child(topic).child(""+System.currentTimeMillis()).setValue(d);
+            notiRef.child(topic).child(""+System.currentTimeMillis()/1000).setValue(d);
             Toast.makeText(getApplication(),"Notification Sent",Toast.LENGTH_SHORT).show();
             pushToDevice(topic, etTitle.getText().toString(), etBody.getText().toString());
             etTitle.setText("");
