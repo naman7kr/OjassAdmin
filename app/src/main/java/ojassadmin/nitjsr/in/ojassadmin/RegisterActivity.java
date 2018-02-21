@@ -80,7 +80,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             rootReference.child(uid).child(FIREBASE_REF_BRANCH).setValue(inputBranch);
             rootReference.child(uid).child(FIREBASE_REF_COLLEGE_REG_ID).setValue(inputRegID);
             rootReference.child(uid).child(FIREBASE_REF_ACCESS_LEVEL).setValue("3");
-            rootReference.child(uid).child(FIREBASE_REF_PHOTO).setValue(user.getDisplayName());
+            rootReference.child(uid).child(FIREBASE_REF_PHOTO).setValue(user.getPhotoUrl().toString());
 
             sharedPrefManager.setIsRegistered(true);
 

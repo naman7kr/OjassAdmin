@@ -141,22 +141,10 @@ public class UsersDetailsActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void handleButtonVisibility(int search_src) {
-        if (search_src == SRC_EVENT) btnAddUser.setVisibility(View.VISIBLE);
-        else {
-            adminRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    accessLevel = Integer.parseInt(dataSnapshot.child(FIREBASE_REF_ACCESS_LEVEL).getValue().toString());
-                    if (accessLevel < 3)
-                        findViewById(R.id.ib_edit_profile).setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
+        if (search_src == SRC_EVENT)
+            btnAddUser.setVisibility(View.VISIBLE);
+        else if (new SharedPrefManager(this).getAccessLevel() < 2)
+            findViewById(R.id.ib_edit_profile).setVisibility(View.VISIBLE);
     }
 
     private void prohibitEdit() {

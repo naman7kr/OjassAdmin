@@ -19,10 +19,14 @@
             android:src="@android:drawable/ic_menu_edit"
             android:background="@android:color/transparent"
             android:layout_gravity="right"
+            android:tint="#000"
+            android:visibility="gone"
+            tools:visibility="visible"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"/>
 
         <ImageView
+            android:layout_marginTop="10dp"
             android:id="@+id/iv_admin_img"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -153,6 +157,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:inputType="text"/>
+
         </LinearLayout>
 
         <LinearLayout

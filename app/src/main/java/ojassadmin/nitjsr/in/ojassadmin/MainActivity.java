@@ -18,12 +18,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.HIDE_OJASS_ID;
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_SEARCH_FLAG;
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_SEARCH_ID;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_SEARCH_SRC;
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.SEARCH_FLAG_EMAIL;
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.SEARCH_FLAG_QR;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.SHOW_OJASS_ID;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -31,11 +36,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnSearch,btnEvents, btnNoti, btnAdmin;
     private ImageView ivQR, ivLogout;
     private boolean isWarningShown;
+    private SharedPrefManager sharedPref;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        sharedPref = new SharedPrefManager(this);
 
         isWarningShown = false;
 
@@ -52,6 +62,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnAdmin.setOnClickListener(this);
         ivQR.setOnClickListener(this);
         ivLogout.setOnClickListener(this);
+
+        if (sharedPref.getAccessLevel() < 3){ //Event Manager
+            btnEvents.setVisibility(View.VISIBLE);
+            btnNoti.setVisibility(View.VISIBLE);
+        }
+        if (sharedPref.getAccessLevel() < 2){ //Update Access
+            btnAdmin.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -74,22 +92,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (view == ivQR){
             createPopup();
         } else if (view == ivLogout){
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Sure to logout?");
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    logOut();
-                }
-            });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                }
-            });
-            builder.show();
+            moveToProfilePage();
         }
+    }
+
+    private void moveToProfilePage() {
+        Intent intent = new Intent(this, AdminDetailsActivity.class);
+        intent.putExtra(INTENT_PARAM_SEARCH_ID, user.getUid());
+        intent.putExtra(INTENT_PARAM_SEARCH_FLAG, SEARCH_FLAG_QR);
+        startActivity(intent);
     }
 
     private void createPopup() {
@@ -97,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         QRDialog.setContentView(R.layout.dialog_qr);
         final ImageView ivQR = QRDialog.findViewById(R.id.iv_qr_code);
         QRDialog.show();
-        final String qrCode = "https://api.qrserver.com/v1/create-qr-code/?data="+FirebaseAuth.getInstance().getCurrentUser().getUid()+"&size=240x240&margin=10";
+        final String qrCode = "https://api.qrserver.com/v1/create-qr-code/?data="+user.getUid()+"&size=240x240&margin=10";
         Picasso.with(this).load(qrCode).fit().networkPolicy(NetworkPolicy.OFFLINE).into(ivQR, new Callback() {
                 @Override
                 public void onSuccess() {
@@ -109,27 +120,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Picasso.with(MainActivity.this).load(qrCode).fit().into(ivQR);
                 }
             });
-    }
-
-    private void logOut() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        mGoogleSignInClient.signOut();
-        FirebaseAuth.getInstance().signOut();
-        moveToLoginPage();
-    }
-
-    private void moveToLoginPage() {
-        SharedPrefManager shared = new SharedPrefManager(this);
-        shared.setIsLoggedIn(false);
-        shared.setIsRegistered(false);
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();
     }
 
     @Override

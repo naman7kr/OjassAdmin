@@ -16,6 +16,7 @@ public class SharedPrefManager {
     private static final String IS_FIRST_OPEN = "isFirstOpen";
     private static final String IS_LOGGED_IN = "isLoggedIn";
     private static final String IS_REGISTERED = "isRegistered";
+    private static final String ACCESS_LEVEL = "accessLevel";
 
     public SharedPrefManager(Context context){
         sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
@@ -46,6 +47,12 @@ public class SharedPrefManager {
         editor.putBoolean(IS_REGISTERED, isRegistered).apply();
     }
 
+    public void setAccessLevel(int accessLevel){
+        editor.putInt(ACCESS_LEVEL, accessLevel).apply();
+    }
 
+    public int getAccessLevel(){
+        return sharedPref.getInt(ACCESS_LEVEL, 3);
+    }
 
 }

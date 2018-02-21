@@ -31,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_ACCESS_LEVEL;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_ADMIN;
 
 
@@ -139,10 +140,13 @@ public class LoginActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
                     sharedPrefManager.setIsRegistered(true);
+                    int accessLevel = Integer.parseInt(dataSnapshot.child(FIREBASE_REF_ACCESS_LEVEL).getValue().toString());
+                    sharedPrefManager.setAccessLevel(accessLevel);
                     moveToMainActivity();
                     Toast.makeText(LoginActivity.this, "Welcome to Ojass Space Voyage Dashboard! "+fName, Toast.LENGTH_LONG).show();
                 } else {
                     sharedPrefManager.setIsRegistered(false);
+                    sharedPrefManager.setAccessLevel(3);
                     moveToRegisterActivity();
                     Toast.makeText(LoginActivity.this, "Hey "+fName+"! Let us know you better.", Toast.LENGTH_LONG).show();
                 }

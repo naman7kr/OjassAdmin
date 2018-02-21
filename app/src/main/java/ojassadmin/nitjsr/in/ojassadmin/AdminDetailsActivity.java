@@ -11,6 +11,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -75,6 +78,18 @@ public class AdminDetailsActivity extends AppCompatActivity implements View.OnCl
 
         prohibitEdit();
         searchUser(SEARCH_FLAG, ID);
+
+        if (new SharedPrefManager(this).getAccessLevel() == 0)
+            ibEdit.setVisibility(View.VISIBLE);
+
+        checkSelf();
+    }
+
+    private void checkSelf() {
+        if (userHashID.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+            btnUpdate.setText("Log Out");
+            btnUpdate.setVisibility(View.VISIBLE);
+        }
     }
 
     private void prohibitEdit() {
@@ -92,8 +107,30 @@ public class AdminDetailsActivity extends AppCompatActivity implements View.OnCl
         if (view == ibEdit){
             enableField();
         } else if (view == btnUpdate){
-            sendDataToServer();
+            if (btnUpdate.getText().toString().equals("Update")) sendDataToServer();
+            else logOut();
         }
+    }
+
+    private void logOut() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mGoogleSignInClient.signOut();
+        FirebaseAuth.getInstance().signOut();
+        moveToLoginPage();
+    }
+
+    private void moveToLoginPage() {
+        SharedPrefManager shared = new SharedPrefManager(this);
+        shared.setIsLoggedIn(false);
+        shared.setIsRegistered(false);
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void sendDataToServer() {

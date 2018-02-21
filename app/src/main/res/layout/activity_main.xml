@@ -77,6 +77,8 @@
             android:textSize="@dimen/btn_text_size"
             android:textAllCaps="false"
             android:text="Events"
+            android:visibility="gone"
+            tools:visibility="visible"
             android:id="@+id/events"
             android:layout_width="match_parent"
             android:layout_height="45dp" />
@@ -87,6 +89,8 @@
             android:textSize="@dimen/btn_text_size"
             android:textAllCaps="false"
             android:text="Notifications"
+            android:visibility="gone"
+            tools:visibility="visible"
             android:id="@+id/noti"
             android:layout_width="match_parent"
             android:layout_height="45dp" />
@@ -97,6 +101,8 @@
             android:textSize="@dimen/btn_text_size"
             android:textAllCaps="false"
             android:text="Admin Search"
+            android:visibility="gone"
+            tools:visibility="visible"
             android:id="@+id/admin"
             android:layout_width="match_parent"
             android:layout_height="45dp" />
