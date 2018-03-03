@@ -52,7 +52,7 @@
                 android:id="@+id/et_search_email"
                 android:layout_width="0dp"
                 android:hint="Email"
-                android:inputType="textEmailAddress"
+                android:inputType="textEmailAddress|textAutoComplete"
                 android:layout_height="wrap_content" />
 
 

@@ -48,7 +48,7 @@
             android:id="@+id/iv_logout"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:src="@drawable/ic_person"
             android:padding="10dp"
             android:layout_gravity="right"/>
 
@@ -104,6 +104,18 @@
             android:visibility="gone"
             tools:visibility="visible"
             android:id="@+id/admin"
+            android:layout_width="match_parent"
+            android:layout_height="45dp" />
+
+        <Button
+            android:layout_marginTop="5dp"
+            android:background="@drawable/button_bg"
+            android:textSize="@dimen/btn_text_size"
+            android:textAllCaps="false"
+            android:text="Add User"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:id="@+id/add_user"
             android:layout_width="match_parent"
             android:layout_height="45dp" />
 

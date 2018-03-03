@@ -62,10 +62,8 @@ import static ojassadmin.nitjsr.in.ojassadmin.Constants.SRC_SEARCH;
 
 public class UsersDetailsActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private ScrollView relativeLayout;
-
     private EditText userName,userInstitute,userRegNo,userPaymentDetails,userRemarks,userOjassID, userBranch;
-    private TextView userEmail,userMobile;
+    private TextView userEmail,userMobile, userHash;
     private CheckBox tShirtCheckBox,kitCheckBox;
     private Spinner sizeSpinner;
     private Button btnRegister, btnEditProfile, btnAddUser;
@@ -75,8 +73,8 @@ public class UsersDetailsActivity extends AppCompatActivity implements View.OnCl
     private String userHashID;
     private boolean trackTshirt, trackKit, trackPayment;
     private FirebaseUser user;
-
     private DatabaseReference userDataRef, eventReference, adminRef;
+    private static final String NOT_REGISTERED = "Not Registered";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +90,6 @@ public class UsersDetailsActivity extends AppCompatActivity implements View.OnCl
         trackKit = true;
         trackPayment = true;
 
-        relativeLayout = findViewById(R.id.user_details_layout);
         pd = new ProgressDialog(this);
         pd.setMessage("Fetching User...");
         pd.setTitle("Please Wait");
@@ -114,6 +111,7 @@ public class UsersDetailsActivity extends AppCompatActivity implements View.OnCl
 
         userEmail=(TextView)findViewById(R.id.text_view_user_email);
         userMobile=(TextView)findViewById(R.id.text_view_user_phone);
+        userHash = findViewById(R.id.tv_user_hash);
 
         tShirtCheckBox=(CheckBox)findViewById(R.id.checkbox_tshirt);
         kitCheckBox=(CheckBox)findViewById(R.id.checkbox_kit);
@@ -226,7 +224,8 @@ public class UsersDetailsActivity extends AppCompatActivity implements View.OnCl
     private void fillData(DataSnapshot dataSnapshot) {
         Picasso.with(this).load(dataSnapshot.child(FIREBASE_REF_PHOTO).getValue().toString()).fit().into((ImageView)findViewById(R.id.iv_user_image));
         if (dataSnapshot.child(FIREBASE_REF_OJASS_ID).exists()) userOjassID.setText(dataSnapshot.child(FIREBASE_REF_OJASS_ID).getValue().toString());
-        else userOjassID.setText("Not Registered");
+        else userOjassID.setText(NOT_REGISTERED);
+        userHash.setText(userHashID);
         userName.setText(dataSnapshot.child(FIREBASE_REF_NAME).getValue().toString());
         userEmail.setText(dataSnapshot.child(FIREBASE_REF_EMAIL).getValue().toString());
         userMobile.setText(dataSnapshot.child(FIREBASE_REF_MOBILE).getValue().toString());
@@ -275,7 +274,7 @@ public class UsersDetailsActivity extends AppCompatActivity implements View.OnCl
 
     private void sendValueToServer() {
         DatabaseReference hashRef = userDataRef.child(userHashID);
-        hashRef.child(FIREBASE_REF_OJASS_ID).setValue(userOjassID.getText().toString());
+        if (!userOjassID.getText().toString().equals("OJ")) hashRef.child(FIREBASE_REF_OJASS_ID).setValue(userOjassID.getText().toString());
         hashRef.child(FIREBASE_REF_NAME).setValue(userName.getText().toString());
         hashRef.child(FIREBASE_REF_COLLEGE).setValue(userInstitute.getText().toString());
         hashRef.child(FIREBASE_REF_COLLEGE_REG_ID).setValue(userRegNo.getText().toString());
@@ -283,9 +282,9 @@ public class UsersDetailsActivity extends AppCompatActivity implements View.OnCl
         hashRef.child(FIREBASE_REF_TSHIRT_SIZE).setValue(sizeSpinner.getSelectedItem().toString().split(" ")[0]);
         if (!TextUtils.isEmpty(userPaymentDetails.getText().toString())) hashRef.child(FIREBASE_REF_PAID_AMOUNT).setValue(userPaymentDetails.getText().toString());
         if (!TextUtils.isEmpty(userRemarks.getText().toString())) hashRef.child(FIREBASE_REF_REMARK).setValue(userRemarks.getText().toString());
-        if (trackTshirt) hashRef.child(FIREBASE_REF_TSHIRT).setValue(user.getEmail());
-        if (trackKit) hashRef.child(FIREBASE_REF_KIT).setValue(user.getEmail());
-        if (trackPayment) hashRef.child(FIREBASE_REF_RECEIVED_BY).setValue(user.getEmail());
+        if (trackTshirt && tShirtCheckBox.isChecked()) hashRef.child(FIREBASE_REF_TSHIRT).setValue(user.getEmail());
+        if (trackKit && kitCheckBox.isChecked()) hashRef.child(FIREBASE_REF_KIT).setValue(user.getEmail());
+        if (trackPayment && !TextUtils.isEmpty(userPaymentDetails.getText())) hashRef.child(FIREBASE_REF_RECEIVED_BY).setValue(user.getEmail());
         Toast.makeText(this, "Values updated!", Toast.LENGTH_SHORT).show();
         finish();
     }
@@ -294,6 +293,7 @@ public class UsersDetailsActivity extends AppCompatActivity implements View.OnCl
         findViewById(R.id.ib_edit_profile).setVisibility(View.GONE);
         btnEditProfile.setVisibility(View.VISIBLE);
 
+        if (userOjassID.getText().toString().equals(NOT_REGISTERED)) userOjassID.setText("OJ");
         userName.setEnabled(true);
         userInstitute.setEnabled(true);
         userRegNo.setEnabled(true);

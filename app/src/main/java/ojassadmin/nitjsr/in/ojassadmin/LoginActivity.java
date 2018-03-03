@@ -33,6 +33,7 @@ import com.squareup.picasso.Picasso;
 
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_ACCESS_LEVEL;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_ADMIN;
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_IS_SOURCE_NEW_USER;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -82,8 +83,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
-
+        if (getIntent().getBooleanExtra(INTENT_PARAM_IS_SOURCE_NEW_USER, false)) signIn();
 
     }
 

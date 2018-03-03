@@ -47,6 +47,7 @@ public class AdminDetailsActivity extends AppCompatActivity implements View.OnCl
     private String userHashID;
     private ProgressDialog pd;
     private ImageView ivImage;
+    private FirebaseUser mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class AdminDetailsActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_admin_details);
 
         adminRef = FirebaseDatabase.getInstance().getReference(FIREBASE_REF_ADMIN);
+        mUser = FirebaseAuth.getInstance().getCurrentUser();
         pd = new ProgressDialog(this);
         pd.setMessage("Fetching User...");
         pd.setTitle("Please Wait");
@@ -86,7 +88,7 @@ public class AdminDetailsActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void checkSelf() {
-        if (userHashID.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+        if (userHashID.equals(mUser.getUid())){
             btnUpdate.setText("Log Out");
             btnUpdate.setVisibility(View.VISIBLE);
         }
@@ -150,7 +152,7 @@ public class AdminDetailsActivity extends AppCompatActivity implements View.OnCl
         etNumber.setEnabled(true);
         etBranch.setEnabled(true);
         etReg.setEnabled(true);
-        etAccess.setEnabled(true);
+        if (!mUser.getUid().equals(userHashID)) etAccess.setEnabled(true);
         btnUpdate.setVisibility(View.VISIBLE);
         ibEdit.setVisibility(View.GONE);
     }

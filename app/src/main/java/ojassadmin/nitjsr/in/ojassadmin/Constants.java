@@ -44,8 +44,12 @@ public class Constants {
     public static final String INTENT_PARAM_EVENT_HASH = "eventHash";
     public static final String INTENT_PARAM_SEARCH_FLAG = "searchFlag";
     public static final String INTENT_PARAM_EVENT_NAME = "eventName";
+    public static final String INTENT_PARAM_IS_SOURCE_NEW_USER = "intentParamIsSrcNewUser";
+    public static final String INTENT_SOURCE_ = "intentParamSource";
 
     public static final int SEARCH_FLAG_OJ_ID = 1;
     public static final int SEARCH_FLAG_EMAIL = 2;
     public static final int SEARCH_FLAG_QR = 3;
+
+    public static final String USER_DUMMY_IMAGE = "https://firebasestorage.googleapis.com/v0/b/ojass18-1cb0d.appspot.com/o/CoreTeamImages%2Fuserdp.png?alt=media&token=15f889fa-6f14-4e23-a259-001e3d017b50";
 }

@@ -33,7 +33,7 @@ import static ojassadmin.nitjsr.in.ojassadmin.Constants.SHOW_OJASS_ID;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private Button btnSearch,btnEvents, btnNoti, btnAdmin;
+    private Button btnSearch,btnEvents, btnNoti, btnAdmin, btnAddUser;
     private ImageView ivQR, ivLogout;
     private boolean isWarningShown;
     private SharedPrefManager sharedPref;
@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnEvents=(Button)findViewById(R.id.events);
         btnNoti = findViewById(R.id.noti);
         btnAdmin = findViewById(R.id.admin);
+        btnAddUser = findViewById(R.id.add_user);
         ivQR = findViewById(R.id.iv_show_qr);
         ivLogout = findViewById(R.id.iv_logout);
 
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnSearch.setOnClickListener(this);
         btnNoti.setOnClickListener(this);
         btnAdmin.setOnClickListener(this);
+        btnAddUser.setOnClickListener(this);
         ivQR.setOnClickListener(this);
         ivLogout.setOnClickListener(this);
 
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if (sharedPref.getAccessLevel() < 2){ //Update Access
             btnAdmin.setVisibility(View.VISIBLE);
+            btnAddUser.setVisibility(View.VISIBLE);
         }
     }
 
@@ -88,6 +91,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (view == btnAdmin){
             Intent intent=new Intent(MainActivity.this, SearchActivity.class);
             intent.putExtra(INTENT_PARAM_SEARCH_SRC, HIDE_OJASS_ID);
+            startActivity(intent);
+        } else if (view == btnAddUser){
+            Intent intent = new Intent(this, AddUserActivity.class);
             startActivity(intent);
         } else if (view == ivQR){
             createPopup();

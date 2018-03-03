@@ -32,8 +32,10 @@
         <activity
             android:name=".NotificationActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".AdminDetailsActivity"
-            android:windowSoftInputMode="stateHidden"/>
+        <activity
+            android:name=".AdminDetailsActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".AddUserActivity"></activity>
     </application>
 
 </manifest>

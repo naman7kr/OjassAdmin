@@ -15,6 +15,15 @@
             android:padding="8dp"
             android:focusableInTouchMode="true">
 
+            <TextView
+                android:id="@+id/tv_user_hash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="5dp"
+                tools:text="sdbkfjbbgsblgbslknensoengsnlkhn5o4no34nsnlrnl4nl3n4l3n5ln3ln4l3n4l3n4l"
+                android:textSize="10sp"/>
+
             <Button
                 android:id="@+id/add_user_to_event"
                 android:textAllCaps="false"
@@ -96,6 +105,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.75"
                     android:ems="10"
+                    android:singleLine="true"
                     android:inputType="textPersonName"/>
             </LinearLayout>
 
@@ -124,6 +134,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.75"
                     android:ems="10"
+                    android:singleLine="true"
                     android:text="user@xyz.com" />
             </LinearLayout>
 
@@ -177,6 +188,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.75"
+                    android:singleLine="true"
                     android:ems="10" />
             </LinearLayout>
 
@@ -226,6 +238,7 @@
                     android:id="@+id/edit_text_branch"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:singleLine="true"
                     android:layout_weight="0.75"
                     android:ems="10" />
             </LinearLayout>
