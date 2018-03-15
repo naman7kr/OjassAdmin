@@ -43,7 +43,7 @@ import static ojassadmin.nitjsr.in.ojassadmin.Constants.USER_DUMMY_IMAGE;
 
 public class AddUserActivity extends AppCompatActivity {
 
-    private EditText etName, etEmail, etPhone, etCollege, etBranch, etRegId, etAmount;
+    private EditText etName, etEmail, etPhone, etCollege, etBranch, etRegId;
     private Button btnAddUser;
     private Spinner spTshirtSize;
     private CheckBox cbTshirt, cbKit;
@@ -69,7 +69,6 @@ public class AddUserActivity extends AppCompatActivity {
         etCollege = findViewById(R.id.input_college);
         etRegId = findViewById(R.id.input_regid);
         etBranch = findViewById(R.id.input_branch);
-        etAmount = findViewById(R.id.input_amount);
         btnAddUser = findViewById(R.id.btn_add_user);
         spTshirtSize = findViewById(R.id.sp_tshirt_size);
         cbTshirt = findViewById(R.id.cbTshirt);
@@ -123,10 +122,6 @@ public class AddUserActivity extends AppCompatActivity {
         ref.child(FIREBASE_REF_TSHIRT_SIZE).setValue(spTshirtSize.getSelectedItem().toString().split(" ")[0]);
         if (cbTshirt.isChecked()) ref.child(FIREBASE_REF_TSHIRT).setValue(adminEmail);
         if (cbKit.isChecked()) ref.child(FIREBASE_REF_KIT).setValue(adminEmail);
-        if (!TextUtils.isEmpty(etAmount.getText())) {
-            ref.child(FIREBASE_REF_PAID_AMOUNT).setValue(etAmount.getText().toString());
-            ref.child(FIREBASE_REF_RECEIVED_BY).setValue(adminEmail);
-        }
         Toast.makeText(this, "User successfully added!", Toast.LENGTH_SHORT).show();
         signOut();
     }

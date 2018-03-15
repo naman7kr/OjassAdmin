@@ -35,7 +35,8 @@
         <activity
             android:name=".AdminDetailsActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".AddUserActivity"></activity>
+        <activity android:name=".AddUserActivity" />
+        <activity android:name=".DBInfoActivity"></activity>
     </application>
 
 </manifest>

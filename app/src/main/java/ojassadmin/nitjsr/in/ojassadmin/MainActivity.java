@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,10 +20,22 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_ACCESS_LEVEL;
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_ADMIN;
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_EMAIL;
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_TSHIRT_SIZE;
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_USERS;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.HIDE_OJASS_ID;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_SEARCH_FLAG;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_SEARCH_ID;
@@ -33,7 +46,7 @@ import static ojassadmin.nitjsr.in.ojassadmin.Constants.SHOW_OJASS_ID;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private Button btnSearch,btnEvents, btnNoti, btnAdmin, btnAddUser;
+    private Button btnSearch,btnEvents, btnNoti, btnAdmin, btnAddUser, btnDbInfo;
     private ImageView ivQR, ivLogout;
     private boolean isWarningShown;
     private SharedPrefManager sharedPref;
@@ -54,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnNoti = findViewById(R.id.noti);
         btnAdmin = findViewById(R.id.admin);
         btnAddUser = findViewById(R.id.add_user);
+        btnDbInfo = findViewById(R.id.dbInfo);
         ivQR = findViewById(R.id.iv_show_qr);
         ivLogout = findViewById(R.id.iv_logout);
 
@@ -62,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnNoti.setOnClickListener(this);
         btnAdmin.setOnClickListener(this);
         btnAddUser.setOnClickListener(this);
+        btnDbInfo.setOnClickListener(this);
         ivQR.setOnClickListener(this);
         ivLogout.setOnClickListener(this);
 
@@ -73,6 +88,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btnAdmin.setVisibility(View.VISIBLE);
             btnAddUser.setVisibility(View.VISIBLE);
         }
+        if (sharedPref.getAccessLevel() == 0) btnDbInfo.setVisibility(View.VISIBLE);
+        //getEventHash();
+        updateAccess();
+    }
+
+    private void updateAccess() {
+        DatabaseReference adminRef = FirebaseDatabase.getInstance().getReference(FIREBASE_REF_ADMIN).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        adminRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int accessLevel = Integer.parseInt(dataSnapshot.child(FIREBASE_REF_ACCESS_LEVEL).getValue().toString());
+                sharedPref.setAccessLevel(accessLevel);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -99,6 +133,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             createPopup();
         } else if (view == ivLogout){
             moveToProfilePage();
+        } else if (view == btnDbInfo){
+            startActivity(new Intent(this, DBInfoActivity.class));
         }
     }
 
@@ -134,5 +170,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             isWarningShown = true;
             Toast.makeText(this, "Press again to exit.", Toast.LENGTH_SHORT).show();
         } else super.onBackPressed();
+    }
+
+    public void getEventHash(){
+        DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference("Events");
+        eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot data : dataSnapshot.getChildren()){
+                    Log.d("LookEVENT",
+                                "Event Hash: " + data.getKey() +
+                                    " Branch name: "+ data.child("branch").getValue() +
+                                    " Event Name : " + data.child("name").getValue());
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

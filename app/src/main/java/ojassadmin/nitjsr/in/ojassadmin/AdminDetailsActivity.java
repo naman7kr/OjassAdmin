@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -83,12 +84,10 @@ public class AdminDetailsActivity extends AppCompatActivity implements View.OnCl
 
         if (new SharedPrefManager(this).getAccessLevel() == 0)
             ibEdit.setVisibility(View.VISIBLE);
-
-        checkSelf();
     }
 
     private void checkSelf() {
-        if (userHashID.equals(mUser.getUid())){
+        if (!TextUtils.isEmpty(userHashID) && userHashID.equals(mUser.getUid())){
             btnUpdate.setText("Log Out");
             btnUpdate.setVisibility(View.VISIBLE);
         }
@@ -168,6 +167,7 @@ public class AdminDetailsActivity extends AppCompatActivity implements View.OnCl
                             for (DataSnapshot child : dataSnapshot.getChildren()){
                                 userHashID = child.getKey();
                                 fillData(child);
+                                checkSelf();
                             }
                         } else showError();
                     }
@@ -180,6 +180,7 @@ public class AdminDetailsActivity extends AppCompatActivity implements View.OnCl
                 break;
             case SEARCH_FLAG_QR :
                 userHashID = id;
+                checkSelf();
                 adminRef.child(userHashID).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {

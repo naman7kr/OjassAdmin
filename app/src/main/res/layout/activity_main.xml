@@ -119,6 +119,25 @@
             android:layout_width="match_parent"
             android:layout_height="45dp" />
 
+        <Button
+            android:layout_marginTop="5dp"
+            android:background="@drawable/button_bg"
+            android:textSize="@dimen/btn_text_size"
+            android:textAllCaps="false"
+            android:text="DB Info"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:id="@+id/dbInfo"
+            android:layout_width="match_parent"
+            android:layout_height="45dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ver : 1.0"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"/>
+
     </LinearLayout>
 
 </RelativeLayout>

@@ -66,20 +66,20 @@
 
                 <TextView
                     android:textSize="16sp"
-                    android:layout_weight="0.25"
+                    android:layout_weight="0.4"
                     android:layout_gravity="center_vertical"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Ojass ID" />
+                    android:text="OjassID OJ18" />
 
                 <EditText
                     android:textSize="17sp"
-                    android:layout_weight="0.75"
                     android:id="@+id/edit_text_user_ojass_id"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:inputType="number"/>
+
             </LinearLayout>
 
             <LinearLayout
@@ -265,6 +265,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.75"
+                    android:inputType="number"
                     android:ems="10" />
             </LinearLayout>
 
