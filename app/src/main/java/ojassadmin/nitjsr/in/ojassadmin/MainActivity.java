@@ -130,7 +130,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(this, AddUserActivity.class);
             startActivity(intent);
         } else if (view == ivQR){
-            createPopup();
+            try {
+                createPopup();
+            } catch (Exception e){
+
+            }
         } else if (view == ivLogout){
             moveToProfilePage();
         } else if (view == btnDbInfo){

@@ -2,21 +2,34 @@ package ojassadmin.nitjsr.in.ojassadmin;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.opencsv.CSVWriter;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.WatchEvent;
 
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_EVENTS;
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_EVENT_PARTICIPANTS;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_KIT;
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_NAME;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_OJASS_ID;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_PAID_AMOUNT;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_RECEIVED_BY;
@@ -30,6 +43,8 @@ public class DBInfoActivity extends AppCompatActivity {
 
     private DatabaseReference userRef;
     private ProgressDialog pd;
+    private static final String OLD_TIMESTAMP = "1521132371453";
+    CSVWriter writer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,17 +58,47 @@ public class DBInfoActivity extends AppCompatActivity {
 
         userRef = FirebaseDatabase.getInstance().getReference(FIREBASE_REF_USERS);
         runMasterQuery();
-        //debugQuery();
+
+        findViewById(R.id.export_excel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pd.show();
+                exportToExcel();
+            }
+        });
+
     }
 
-    private void debugQuery() {
+    private void exportToExcel() {
+        String baseDir = Environment.getExternalStorageDirectory().getAbsolutePath();
+        String fileName = "OjassData.csv";
+        String filePath = baseDir + File.separator + fileName;
+        File f = new File(filePath);
+        FileWriter mFileWriter;
+        try {
+            if (f.exists() && !f.isDirectory()) {
+                mFileWriter = new FileWriter(filePath, true);
+                writer = new CSVWriter(mFileWriter);
+            }
+            else writer = new CSVWriter(new FileWriter(filePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot data : dataSnapshot.getChildren()){
-                    if (data.child(FIREBASE_REF_PAID_AMOUNT).exists())
-                        Toast.makeText(DBInfoActivity.this, data.getKey().toString(), Toast.LENGTH_LONG).show();
+                int count = 0;
+                for (DataSnapshot userData : dataSnapshot.getChildren()){
+                    if (userData.child(FIREBASE_REF_OJASS_ID).exists()){
+                        count++;
+                        String row[] = new String[2];
+                        row[0] = userData.child(FIREBASE_REF_OJASS_ID).getValue().toString();
+                        row[1] = userData.child(FIREBASE_REF_NAME).getValue().toString();
+                        writer.writeNext(row);
+                    }
                 }
+                //Toast.makeText(DBInfoActivity.this, ""+count, Toast.LENGTH_SHORT).show();
+                pd.dismiss();
             }
 
             @Override

@@ -244,4 +244,12 @@
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/export_excel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Export to Excel"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"/>
+
 </LinearLayout>
