@@ -122,16 +122,19 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    //method to go to main activity
     private void moveToMainActivity() {
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 
+    //method to go to register activity
     private void moveToRegisterActivity() {
         startActivity(new Intent(this, RegisterActivity.class));
         finish();
     }
 
+    //check if user is already registerd
     private void isRegisteredUser() {
         final String fName = mAuth.getCurrentUser().getDisplayName().split(" ")[0];
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference(FIREBASE_REF_ADMIN).child(mAuth.getCurrentUser().getUid());
@@ -160,6 +163,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    //method to sign in
     private void signIn(){
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
