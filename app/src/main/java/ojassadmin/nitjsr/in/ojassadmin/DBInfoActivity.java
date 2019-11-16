@@ -1,38 +1,27 @@
 package ojassadmin.nitjsr.in.ojassadmin;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.opencsv.CSVWriter;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.WatchEvent;
 
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_EVENTS;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_EVENT_PARTICIPANTS;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_KIT;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_NAME;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_OJASS_ID;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_PAID_AMOUNT;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_RECEIVED_BY;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_TSHIRT;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_TSHIRT_SIZE;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_USERS;

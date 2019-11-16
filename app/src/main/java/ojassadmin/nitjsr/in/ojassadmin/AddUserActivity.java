@@ -2,8 +2,8 @@ package ojassadmin.nitjsr.in.ojassadmin;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,14 +13,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -31,13 +27,10 @@ import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_EMAIL;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_KIT;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_MOBILE;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_NAME;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_PAID_AMOUNT;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_PHOTO;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_RECEIVED_BY;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_TSHIRT;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_TSHIRT_SIZE;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_USERS;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_EVENT_HASH;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_IS_SOURCE_NEW_USER;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.USER_DUMMY_IMAGE;
 

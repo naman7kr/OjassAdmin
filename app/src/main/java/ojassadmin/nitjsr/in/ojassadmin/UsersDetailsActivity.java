@@ -1,22 +1,16 @@
 package ojassadmin.nitjsr.in.ojassadmin;
 
-import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,15 +28,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Request;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.android.volley.Request.Method.POST;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_ACCESS_LEVEL;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_ADMIN;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_BRANCH;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_COLLEGE;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_COLLEGE_REG_ID;
@@ -74,7 +64,6 @@ import static ojassadmin.nitjsr.in.ojassadmin.Constants.SEARCH_FLAG_EMAIL;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.SEARCH_FLAG_OJ_ID;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.SEARCH_FLAG_QR;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.SRC_EVENT;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.SRC_SEARCH;
 
 public class UsersDetailsActivity extends AppCompatActivity implements View.OnClickListener{
 
