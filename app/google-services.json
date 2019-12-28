@@ -1,0 +1,125 @@
+{
+  "project_info": {
+    "project_number": "152106484750",
+    "firebase_url": "https://ojass20-46eab.firebaseio.com",
+    "project_id": "ojass20-46eab",
+    "storage_bucket": "ojass20-46eab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:152106484750:android:1d3bbfa2e596157665285f",
+        "android_client_info": {
+          "package_name": "ojass20.nitjsr.in.ojass"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "152106484750-1l8naaa7bgcmsdba4h7u5g75vuep1mo6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ojass20.nitjsr.in.ojass",
+            "certificate_hash": "a7afea21feb29f76de9071335ac6adde8a96e2f8"
+          }
+        },
+        {
+          "client_id": "152106484750-u2ldghhvi67tr97vinkj3catp2u10a56.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ojass20.nitjsr.in.ojass",
+            "certificate_hash": "fbff6c8162e962c07681981746c047982fe836af"
+          }
+        },
+        {
+          "client_id": "152106484750-2un65qqc24ifhvudibjgkholvh65v47g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ojass20.nitjsr.in.ojass",
+            "certificate_hash": "0f16dfee06f38c435da3ea58329d9cc5b3883b15"
+          }
+        },
+        {
+          "client_id": "152106484750-btcdrvun5rur8bfsjg0csm5ieonap71r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ojass20.nitjsr.in.ojass",
+            "certificate_hash": "14693268ea3a17d386ff7db5da19c081677028ff"
+          }
+        },
+        {
+          "client_id": "152106484750-a3rbbrt13a098ff12qr11blppu1obim7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ojass20.nitjsr.in.ojass",
+            "certificate_hash": "c18e76f00583c03f10cf2ead8ff4803feaa16f24"
+          }
+        },
+        {
+          "client_id": "152106484750-edtlmvc16joekfmhbsgu9k68p2o0ad2i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ojass20.nitjsr.in.ojass",
+            "certificate_hash": "c9d7c04317a452776b010bf1baa7235a6723286c"
+          }
+        },
+        {
+          "client_id": "152106484750-pltcifpfm0825378hnmmqnk1uegohlv1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHNzhL4kQKU0T1Uryoug6MTRvrs-1bueE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "152106484750-pltcifpfm0825378hnmmqnk1uegohlv1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:152106484750:android:a7c0f081e8ddbcdb65285f",
+        "android_client_info": {
+          "package_name": "ojassadmin.nitjsr.in.ojassadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "152106484750-9t8rfq136fe2q4slvvg923v7i7746ls5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ojassadmin.nitjsr.in.ojassadmin",
+            "certificate_hash": "14693268ea3a17d386ff7db5da19c081677028ff"
+          }
+        },
+        {
+          "client_id": "152106484750-pltcifpfm0825378hnmmqnk1uegohlv1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHNzhL4kQKU0T1Uryoug6MTRvrs-1bueE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "152106484750-pltcifpfm0825378hnmmqnk1uegohlv1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

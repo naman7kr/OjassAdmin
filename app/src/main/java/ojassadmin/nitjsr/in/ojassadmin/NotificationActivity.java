@@ -1,5 +1,6 @@
 package ojassadmin.nitjsr.in.ojassadmin;
 
+import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,9 +24,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_NOTIFICATIONS;
 
@@ -66,10 +71,12 @@ public class NotificationActivity extends AppCompatActivity implements View.OnCl
     void sendPushNotification() {
         String topic = spChannel.getSelectedItem().toString();
         if(!TextUtils.isEmpty(etTitle.getText()) && !TextUtils.isEmpty(etBody.getText())) {
-            FeedModel d = new FeedModel(etTitle.getText().toString(), etBody.getText().toString());
-            notiRef.child(topic).child(""+System.currentTimeMillis()/1000).setValue(d);
+            String key = notiRef.child(topic).push().getKey();
+            notiRef.child(topic).child(key).child("ques").setValue(etTitle.getText().toString());
+            notiRef.child(topic).child(key).child("ans").setValue(etBody.getText().toString());
             Toast.makeText(getApplication(),"Notification Sent",Toast.LENGTH_SHORT).show();
-            pushToDevice(topic, etTitle.getText().toString(), etBody.getText().toString());
+            NotificationTask notificationTask = new NotificationTask();
+            notificationTask.execute(etTitle.getText().toString().trim(),etBody.getText().toString().trim());
             etTitle.setText("");
             etBody.setText("");
         } else {
@@ -77,65 +84,56 @@ public class NotificationActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    private void pushToDevice(String topic, String title, String body) {
-        try {
+    class NotificationTask extends AsyncTask<String, Void, Void> {
 
-            JSONObject data=new JSONObject();
-            data.put("body",title+"\n"+body);
-            data.put("title",topic);
+        @Override
+        protected Void doInBackground(String... strings) {
+            try {
+                String jsonResponse;
 
-            JSONObject feilds = new JSONObject();
-            feilds.put("to","/topics/"+topic);
-            feilds.put("notification",data);
+                URL url = new URL("https://onesignal.com/api/v1/notifications");
+                HttpURLConnection con = (HttpURLConnection)url.openConnection();
+                con.setUseCaches(false);
+                con.setDoOutput(true);
+                con.setDoInput(true);
 
-            final String requestBody = feilds.toString();
-            final String url="https://fcm.googleapis.com/fcm/send";
-            StringRequest stringRequest=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    //
+                con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                con.setRequestProperty("Authorization", "Basic MDViZTQ3MTItZjNmYi00NjNmLWE2NTgtZDA1NTZmOTc0MTI4");
+                con.setRequestMethod("POST");
+                String strJsonBody = "{"
+                        +   "\"app_id\": \"a1a3776f-af94-474f-af74-f852c5cbc974\","
+                        +   "\"included_segments\": [\"All\"],"
+                        +   "\"data\": {\"foo\": \"bar\"},"
+                        +   "\"headings\": {\"en\": \"" + strings[0] +"\"},"
+                        +   "\"contents\": {\"en\": \"" + strings[1] +"\"},"
+                        +   "\"small_icon\":  \"icon\""
+                        + "}";
+
+                byte[] sendBytes = strJsonBody.getBytes("UTF-8");
+                con.setFixedLengthStreamingMode(sendBytes.length);
+
+                OutputStream outputStream = con.getOutputStream();
+                outputStream.write(sendBytes);
+
+                int httpResponse = con.getResponseCode();
+
+                if (  httpResponse >= HttpURLConnection.HTTP_OK
+                        && httpResponse < HttpURLConnection.HTTP_BAD_REQUEST) {
+                    Scanner scanner = new Scanner(con.getInputStream(), "UTF-8");
+                    jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
+                    scanner.close();
                 }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
+                else {
+                    Scanner scanner = new Scanner(con.getErrorStream(), "UTF-8");
+                    jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
+                    scanner.close();
                 }
-            })
-            {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String,String> header=new HashMap<>();
-                    header.put("Authorization","key="+FCM_KEY);
-                    header.put("Content-Type","application/json");
-                    return header;
-                }
+                System.out.println("jsonResponse:\n" + jsonResponse);
 
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        uee.printStackTrace();
-                        return null;
-                    }
-                }
-
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-            };
-            stringRequest.addMarker(VOLLEY_TAG);
-            queue.add(stringRequest);
-        } catch (JSONException e) {
-            e.printStackTrace();
+            } catch(Throwable t) {
+                t.printStackTrace();
+            }
+            return null;
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        queue.cancelAll(VOLLEY_TAG);
     }
 }
