@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class FeedPost {
 
+    public String timestamp;
     public String event;
     public String subEvent;
     public String content;
@@ -19,6 +20,7 @@ public class FeedPost {
 
     public FeedPost(String timestamp, String content,String event,  String imageURL, String subEvent,
                     ArrayList<Likes> mlikes,ArrayList<Comments> mcomments) {
+        this.timestamp = timestamp;
         this.event = event;
         this.subEvent = subEvent;
         this.content = content;
