@@ -106,7 +106,7 @@ public class NotificationActivity extends AppCompatActivity implements View.OnCl
                         +   "\"data\": {\"foo\": \"bar\"},"
                         +   "\"headings\": {\"en\": \"" + strings[0] +"\"},"
                         +   "\"contents\": {\"en\": \"" + strings[1] +"\"},"
-                        +   "\"small_icon\":  \"icon\""
+                        +   "\"small_icon\":  \"icon_ojass\""
                         + "}";
 
                 byte[] sendBytes = strJsonBody.getBytes("UTF-8");

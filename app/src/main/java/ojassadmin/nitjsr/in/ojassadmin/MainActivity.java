@@ -34,7 +34,7 @@ import static ojassadmin.nitjsr.in.ojassadmin.Constants.SHOW_OJASS_ID;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private Button btnSearch,btnEvents, btnNoti, btnAdmin, btnAddUser, btnDbInfo;
+    private Button btnSearch,btnEvents, btnNoti, btnAdmin, btnAddUser, btnDbInfo,viewfeedback;
     private ImageView ivQR, ivLogout;
     private boolean isWarningShown;
     private SharedPrefManager sharedPref;
@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         user = FirebaseAuth.getInstance().getCurrentUser();
         sharedPref = new SharedPrefManager(this);
 
+
         isWarningShown = false;
 
         btnSearch=(Button)findViewById(R.id.search);
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnDbInfo = findViewById(R.id.dbInfo);
         ivQR = findViewById(R.id.iv_show_qr);
         ivLogout = findViewById(R.id.iv_logout);
+        viewfeedback=findViewById(R.id.feedbackPage);
 
         btnEvents.setOnClickListener(this);
         btnSearch.setOnClickListener(this);
@@ -67,16 +69,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnDbInfo.setOnClickListener(this);
         ivQR.setOnClickListener(this);
         ivLogout.setOnClickListener(this);
+        viewfeedback.setOnClickListener(this);
 
-        if (sharedPref.getAccessLevel() < 3){ //Event Manager
-            btnEvents.setVisibility(View.VISIBLE);
-            btnNoti.setVisibility(View.VISIBLE);
-        }
-        if (sharedPref.getAccessLevel() < 2){ //Update Access
-            btnAdmin.setVisibility(View.VISIBLE);
-            btnAddUser.setVisibility(View.VISIBLE);
-        }
-        if (sharedPref.getAccessLevel() == 0) btnDbInfo.setVisibility(View.VISIBLE);
+
         //getEventHash();
         updateAccess();
     }
@@ -88,6 +83,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int accessLevel = Integer.parseInt(dataSnapshot.child(FIREBASE_REF_ACCESS_LEVEL).getValue().toString());
                 sharedPref.setAccessLevel(accessLevel);
+                if (sharedPref.getAccessLevel() < 3){ //Event Manager
+                    btnEvents.setVisibility(View.VISIBLE);
+                    btnNoti.setVisibility(View.VISIBLE);
+                }
+                if (sharedPref.getAccessLevel() < 2){ //Update Access
+                    btnAdmin.setVisibility(View.VISIBLE);
+                    btnAddUser.setVisibility(View.VISIBLE);
+                }
+                if (sharedPref.getAccessLevel() == 0) btnDbInfo.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -127,6 +131,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             moveToProfilePage();
         } else if (view == btnDbInfo){
             startActivity(new Intent(this, DBInfoActivity.class));
+        }else if(view == viewfeedback){
+            startActivity(new Intent(MainActivity.this,FeedBackActivity.class));
         }
     }
 
