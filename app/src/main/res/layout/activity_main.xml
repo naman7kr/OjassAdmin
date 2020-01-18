@@ -140,7 +140,16 @@
             android:id="@+id/feedbackPage"
             android:layout_width="match_parent"
             android:layout_height="45dp" />
-
+        <Button
+            android:layout_marginTop="5dp"
+            android:background="@drawable/button_bg"
+            android:textSize="@dimen/btn_text_size"
+            android:textAllCaps="false"
+            android:text="Send Feeds"
+            android:visibility="visible"
+            android:id="@+id/btn_feeds"
+            android:layout_width="match_parent"
+            android:layout_height="45dp" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

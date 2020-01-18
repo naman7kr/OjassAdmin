@@ -40,7 +40,7 @@ import static ojassadmin.nitjsr.in.ojassadmin.Constants.eventNames;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private Button btnSearch,btnEvents, btnNoti, btnAdmin, btnAddUser, btnDbInfo,viewfeedback;
+    private Button btnSearch,btnEvents, btnNoti, btnAdmin, btnAddUser, btnDbInfo,viewfeedback,sendFeeds;
     private ImageView ivQR, ivLogout;
     private boolean isWarningShown;
     private SharedPrefManager sharedPref;
@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ivQR = findViewById(R.id.iv_show_qr);
         ivLogout = findViewById(R.id.iv_logout);
         viewfeedback=findViewById(R.id.feedbackPage);
+        sendFeeds = findViewById(R.id.btn_feeds);
     }
     private void setListeners(){
         btnEvents.setOnClickListener(this);
@@ -89,8 +90,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ivQR.setOnClickListener(this);
         ivLogout.setOnClickListener(this);
         viewfeedback.setOnClickListener(this);
+        sendFeeds.setOnClickListener(this);
     }
     private void storeEvents() {
+        eventNames.clear();
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Branches");
         ref.keepSynced(true);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -186,6 +189,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(this, DBInfoActivity.class));
         }else if(view == viewfeedback){
             startActivity(new Intent(MainActivity.this,FeedBackActivity.class));
+        }else if(view == sendFeeds){
+            startActivity(new Intent(MainActivity.this,FeedsActivity.class));
         }
     }
 
