@@ -79,7 +79,7 @@ public class Constants {
             "LiveCS",
             "Exposicion"
     };
-
+    public static final ArrayList<String> eventNames = new ArrayList<>();
     public static final String[][] EventList = new String[][]{
             {"Select Branch"},
             {"Select Event","Autoquiz","Accelodrome","Junkyard Wars","Samveg","Prakshepan","Enigma","Ansys"},

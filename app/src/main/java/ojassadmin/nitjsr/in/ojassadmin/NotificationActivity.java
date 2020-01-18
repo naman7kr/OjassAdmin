@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -28,6 +29,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -43,22 +45,35 @@ public class NotificationActivity extends AppCompatActivity implements View.OnCl
     private RequestQueue queue;
     private static final String VOLLEY_TAG = "VolleyTag";
     private static final String FCM_KEY = "AAAAX90eYv8:APA91bG_JJUSsjVJfntkCsVDGn-_0oecmrV4QX-fOeqP2WZr6R8bSlUX8_4NyAlg6ElfzqYqQSkK-ctRZ4zHh21ziPDpqR6wSl_w4A4k_a9GdyvN5B3--qNeUI6zn80HOkNrKgLg5irD";
-
+    ArrayList<String> notiList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
+        init();
+        setSpinner();
 
-        queue  =Volley.newRequestQueue(this);
-
-        btnSend = findViewById(R.id.btn_send);
-        etTitle = findViewById(R.id.et_noti_title);
-        etBody = findViewById(R.id.et_noti_body);
-        spChannel = findViewById(R.id.sp_noti_channel);
 
         notiRef = FirebaseDatabase.getInstance().getReference(FIREBASE_REF_NOTIFICATIONS);
 
         btnSend.setOnClickListener(this);
+    }
+
+    private void init() {
+        queue  =Volley.newRequestQueue(this);
+        btnSend = findViewById(R.id.btn_send);
+        etTitle = findViewById(R.id.et_noti_title);
+        etBody = findViewById(R.id.et_noti_body);
+        spChannel = findViewById(R.id.sp_noti_channel);
+    }
+
+    private void setSpinner() {
+        notiList.clear();
+        notiList = Constants.eventNames;
+        notiList.add(0,"Ojass");
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this,R.layout.spinner_item, notiList);
+        arrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+        spChannel.setAdapter(arrayAdapter);
     }
 
     @Override
@@ -71,9 +86,10 @@ public class NotificationActivity extends AppCompatActivity implements View.OnCl
     void sendPushNotification() {
         String topic = spChannel.getSelectedItem().toString();
         if(!TextUtils.isEmpty(etTitle.getText()) && !TextUtils.isEmpty(etBody.getText())) {
-            String key = notiRef.child(topic).push().getKey();
-            notiRef.child(topic).child(key).child("ques").setValue(etTitle.getText().toString());
-            notiRef.child(topic).child(key).child("ans").setValue(etBody.getText().toString());
+            String key = notiRef.push().getKey();
+            notiRef.child(key).child("ques").setValue(etTitle.getText().toString());
+            notiRef.child(key).child("ans").setValue(etBody.getText().toString());
+            notiRef.child(key).child("event").setValue(topic);
             Toast.makeText(getApplication(),"Notification Sent",Toast.LENGTH_SHORT).show();
             NotificationTask notificationTask = new NotificationTask();
             notificationTask.execute(etTitle.getText().toString().trim(),etBody.getText().toString().trim());

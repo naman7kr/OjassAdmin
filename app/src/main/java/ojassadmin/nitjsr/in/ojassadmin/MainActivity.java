@@ -1,8 +1,10 @@
 package ojassadmin.nitjsr.in.ojassadmin;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
@@ -10,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,6 +26,8 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_ACCESS_LEVEL;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_ADMIN;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.HIDE_OJASS_ID;
@@ -31,6 +36,7 @@ import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_SEARCH_ID;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_SEARCH_SRC;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.SEARCH_FLAG_QR;
 import static ojassadmin.nitjsr.in.ojassadmin.Constants.SHOW_OJASS_ID;
+import static ojassadmin.nitjsr.in.ojassadmin.Constants.eventNames;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -39,18 +45,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean isWarningShown;
     private SharedPrefManager sharedPref;
     private FirebaseUser user;
+    private ProgressDialog pDialog;
+    int pflag = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        init();
+        setListeners();
+        pDialog.show();
+        //getEventHash();
+        updateAccess();
+        storeEvents();
+    }
 
+    private void init() {
         user = FirebaseAuth.getInstance().getCurrentUser();
         sharedPref = new SharedPrefManager(this);
 
 
         isWarningShown = false;
-
+        pDialog = new ProgressDialog(this);
+        pDialog.setCancelable(false);
+        pDialog.setMessage("Loading");
         btnSearch=(Button)findViewById(R.id.search);
         btnEvents=(Button)findViewById(R.id.events);
         btnNoti = findViewById(R.id.noti);
@@ -60,7 +78,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ivQR = findViewById(R.id.iv_show_qr);
         ivLogout = findViewById(R.id.iv_logout);
         viewfeedback=findViewById(R.id.feedbackPage);
-
+    }
+    private void setListeners(){
         btnEvents.setOnClickListener(this);
         btnSearch.setOnClickListener(this);
         btnNoti.setOnClickListener(this);
@@ -70,10 +89,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ivQR.setOnClickListener(this);
         ivLogout.setOnClickListener(this);
         viewfeedback.setOnClickListener(this);
+    }
+    private void storeEvents() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Branches");
+        ref.keepSynced(true);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    if (ds.getKey().equalsIgnoreCase("National College Film Festival"))
+                        continue;
+                    boolean z = false;
+                    for (int i = 0; i < eventNames.size(); i++) {
+                        if (eventNames.get(i).equals(ds.getKey())) {
+                            z = true;
+                            break;
+                        }
+                    }
+                    if (!z) {
+                        eventNames.add(ds.getKey());
+                    }
+                }
+                if(pflag==1){
+                    pDialog.dismiss();
+                }
+                pflag=1;
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-        //getEventHash();
-        updateAccess();
+            }
+        });
     }
 
     private void updateAccess() {
@@ -81,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         adminRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 int accessLevel = Integer.parseInt(dataSnapshot.child(FIREBASE_REF_ACCESS_LEVEL).getValue().toString());
                 sharedPref.setAccessLevel(accessLevel);
                 if (sharedPref.getAccessLevel() < 3){ //Event Manager
@@ -92,6 +140,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     btnAddUser.setVisibility(View.VISIBLE);
                 }
                 if (sharedPref.getAccessLevel() == 0) btnDbInfo.setVisibility(View.VISIBLE);
+
+                if(pflag==1){
+                    pDialog.dismiss();
+                }
+                pflag=1;
             }
 
             @Override

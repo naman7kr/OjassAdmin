@@ -20,7 +20,7 @@
             android:background="@drawable/spinner_bg"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:entries="@array/noti_channel"/>
+            />
 
         <EditText
             android:id="@+id/et_noti_title"

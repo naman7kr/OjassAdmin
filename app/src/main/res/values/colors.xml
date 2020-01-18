@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#212121</color>
     <color name="colorAccent">#F44336</color>
     <color name="payment_details_color">#FF0000</color>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
 </resources>
