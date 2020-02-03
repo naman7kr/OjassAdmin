@@ -1,4 +1,4 @@
-package ojassadmin.nitjsr.in.ojassadmin;
+package ojassadmin.nitjsr.in.ojassadmin.Models;
 
 /**
  * Created by Aditya on 26-12-2016.

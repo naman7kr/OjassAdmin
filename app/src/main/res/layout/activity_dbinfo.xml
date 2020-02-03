@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ojassadmin.nitjsr.in.ojassadmin.DBInfoActivity"
+    tools:context="ojassadmin.nitjsr.in.ojassadmin.Activities.DBInfoActivity"
     android:orientation="vertical"
     android:padding="20dp">
 

@@ -1,7 +1,9 @@
-package ojassadmin.nitjsr.in.ojassadmin;
+package ojassadmin.nitjsr.in.ojassadmin.Activities;
 
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
+import ojassadmin.nitjsr.in.ojassadmin.R;
+
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,14 +15,14 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import static android.view.View.GONE;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_SEARCH_FLAG;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_SEARCH_ID;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_SEARCH_SRC;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.SEARCH_FLAG_EMAIL;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.SEARCH_FLAG_OJ_ID;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.SEARCH_FLAG_QR;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.SHOW_OJASS_ID;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.SRC_SEARCH;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.INTENT_PARAM_SEARCH_FLAG;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.INTENT_PARAM_SEARCH_ID;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.INTENT_PARAM_SEARCH_SRC;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.SEARCH_FLAG_EMAIL;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.SEARCH_FLAG_OJ_ID;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.SEARCH_FLAG_QR;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.SHOW_OJASS_ID;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.SRC_SEARCH;
 
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -42,14 +44,20 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
         integrator = new IntentIntegrator(this);
         integrator.setOrientationLocked(false);
-
+        findViewById(R.id.btn_admin_list).setOnClickListener(this);
         mOjassId.setOnClickListener(this);
         mEmail.setOnClickListener(this);
         mQRCode.setOnClickListener(this);
 
         dest  = getIntent().getBooleanExtra(INTENT_PARAM_SEARCH_SRC, SHOW_OJASS_ID);
-        if (dest) findViewById(R.id.ll_ojass_id).setVisibility(View.VISIBLE);
-        else findViewById(R.id.ll_ojass_id).setVisibility(GONE);
+        if (dest) {
+            findViewById(R.id.ll_ojass_id).setVisibility(View.VISIBLE);
+            findViewById(R.id.btn_admin_list).setVisibility(GONE);
+        }
+        else {
+            findViewById(R.id.ll_ojass_id).setVisibility(GONE);
+            findViewById(R.id.btn_admin_list).setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -65,6 +73,9 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             else showMessage("Enter email ID");
         } else if (view.getId()==R.id.btn_search_qr) {
             integrator.initiateScan();
+        } else if (view.getId() == R.id.btn_admin_list){
+            Intent intent = new Intent(this,AdminListActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -79,7 +90,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
     private void openUserDetailActivity(final String ID, final int FLAG, final boolean DEST){
         Intent intent;
-        if (DEST == SHOW_OJASS_ID) intent = new Intent(this,UsersDetailsActivity.class);
+        if (DEST == SHOW_OJASS_ID) intent = new Intent(this, UsersDetailsActivity.class);
         else intent = new Intent(this, AdminDetailsActivity.class);
         intent.putExtra(INTENT_PARAM_SEARCH_ID, ID);
         intent.putExtra(INTENT_PARAM_SEARCH_FLAG, FLAG);

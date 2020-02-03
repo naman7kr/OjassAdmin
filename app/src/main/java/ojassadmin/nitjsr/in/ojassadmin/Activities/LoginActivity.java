@@ -1,9 +1,12 @@
-package ojassadmin.nitjsr.in.ojassadmin;
+package ojassadmin.nitjsr.in.ojassadmin.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import ojassadmin.nitjsr.in.ojassadmin.R;
+import ojassadmin.nitjsr.in.ojassadmin.Utilities.SharedPrefManager;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +25,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,9 +34,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_ACCESS_LEVEL;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_ADMIN;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_IS_SOURCE_NEW_USER;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_ACCESS_LEVEL;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_ADMIN;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.INTENT_PARAM_IS_SOURCE_NEW_USER;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -50,17 +54,22 @@ public class LoginActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
-
         sharedPrefManager = new SharedPrefManager(this);
-
-        if (sharedPrefManager.isLoggedIn()) {
-            if (sharedPrefManager.isRegistered()) moveToMainActivity();
-            else moveToRegisterActivity();
+        mAuth = FirebaseAuth.getInstance();
+        if(mAuth.getCurrentUser()!=null){
+            //auto login
+            if(sharedPrefManager.isRegistered()){
+                moveToMainActivity();
+                Toast.makeText(LoginActivity.this, "Welcome to Ojass Indic Erudition Dashboard! ", Toast.LENGTH_LONG).show();
+            }else {
+                isRegisteredUser(mAuth.getCurrentUser());
+            }
         }
+
 
         Picasso.with(this).load(R.drawable.login_bg).fit().into((ImageView)findViewById(R.id.login_screen));
 
-        mAuth = FirebaseAuth.getInstance();
+
         pd = new ProgressDialog(this);
         pd.setTitle("Hang On");
         pd.setMessage("Connecting you to Mothership...");
@@ -71,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
+                .requestProfile()
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -82,8 +92,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        if (getIntent().getBooleanExtra(INTENT_PARAM_IS_SOURCE_NEW_USER, false)) signIn();
-
     }
 
     @Override
@@ -94,6 +102,7 @@ public class LoginActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e){
                 Log.d(TAG, "Google Sign in failed. Reason: " + e.getMessage());
@@ -102,15 +111,19 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+    private void firebaseAuthWithGoogle(final GoogleSignInAccount account) {
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful() && mAuth.getCurrentUser()!=null){
+                            sharedPrefManager.setEmail(account.getEmail());
+
+                            Log.e("LOL", sharedPrefManager.getEmail() + "WTF");
+                            Log.e("LOL", mAuth.getCurrentUser().getDisplayName() + "WTF");
                             sharedPrefManager.setIsLoggedIn(true);
-                            isRegisteredUser();
+                            isRegisteredUser(mAuth.getCurrentUser());
                         } else {
                             if (pd.isShowing()) pd.dismiss();
                             Log.d(TAG,"Authentication failed. Reason: "+ task.getException());
@@ -118,7 +131,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-
     }
 
     //method to go to main activity
@@ -134,32 +146,39 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     //check if user is already registerd
-    private void isRegisteredUser() {
-        final String fName = mAuth.getCurrentUser().getDisplayName().split(" ")[0];
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference(FIREBASE_REF_ADMIN).child(mAuth.getCurrentUser().getUid());
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    sharedPrefManager.setIsRegistered(true);
-                    int accessLevel = Integer.parseInt(dataSnapshot.child(FIREBASE_REF_ACCESS_LEVEL).getValue().toString());
-                    sharedPrefManager.setAccessLevel(accessLevel);
-                    moveToMainActivity();
-                    Toast.makeText(LoginActivity.this, "Welcome to Ojass Space Voyage Dashboard! "+fName, Toast.LENGTH_LONG).show();
-                } else {
-                    sharedPrefManager.setIsRegistered(false);
-                    sharedPrefManager.setAccessLevel(3);
-                    moveToRegisterActivity();
-                    Toast.makeText(LoginActivity.this, "Hey "+fName+"! Let us know you better.", Toast.LENGTH_LONG).show();
+    private void isRegisteredUser(FirebaseUser user) {
+        if(mAuth.getCurrentUser()!=null) {
+            final String fName = mAuth.getCurrentUser().getDisplayName().split(" ")[0];
+
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference(FIREBASE_REF_ADMIN).child(mAuth.getCurrentUser().getUid());
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    try {
+                        if (dataSnapshot.exists()) {
+                            sharedPrefManager.setIsRegistered(true);
+                            moveToMainActivity();
+                            Toast.makeText(LoginActivity.this, "Welcome to Ojass Indic Erudition Dashboard! " + fName, Toast.LENGTH_LONG).show();
+                        } else {
+                            sharedPrefManager.setIsRegistered(false);
+                            moveToRegisterActivity();
+                            Toast.makeText(LoginActivity.this, "Hey " + fName + "! Let us know you better.", Toast.LENGTH_LONG).show();
+                        }
+                        if (pd.isShowing()) pd.dismiss();
+                    }catch (Exception e){
+
+                    }
+
                 }
-                if (pd.isShowing()) pd.dismiss();
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }else {
+            Toast.makeText(this, "Cannot get user", Toast.LENGTH_SHORT).show();
+        }
     }
 
     //method to sign in

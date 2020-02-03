@@ -1,4 +1,4 @@
-package ojassadmin.nitjsr.in.ojassadmin;
+package ojassadmin.nitjsr.in.ojassadmin.Models;
 
 public class Comments {
     public String sender;

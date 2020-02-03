@@ -1,9 +1,12 @@
-package ojassadmin.nitjsr.in.ojassadmin;
+package ojassadmin.nitjsr.in.ojassadmin.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 
 import androidx.appcompat.app.AppCompatActivity;
+import ojassadmin.nitjsr.in.ojassadmin.R;
+import ojassadmin.nitjsr.in.ojassadmin.Utilities.SharedPrefManager;
+
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -33,37 +36,37 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.android.volley.Request.Method.POST;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_BRANCH;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_COLLEGE;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_COLLEGE_REG_ID;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_EMAIL;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_EVENTS;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_EVENT_BRANCH;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_EVENT_NAME;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_EVENT_PARTICIPANTS;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_EVENT_RESULT;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_EVENT_TIME;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_KIT;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_MOBILE;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_NAME;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_OJASS_ID;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_PAID_AMOUNT;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_PHOTO;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_RECEIVED_BY;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_REMARK;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_TSHIRT;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_TSHIRT_SIZE;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_USERS;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_EVENT_BRANCH;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_EVENT_HASH;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_EVENT_NAME;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_SEARCH_FLAG;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_SEARCH_ID;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_SEARCH_SRC;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.SEARCH_FLAG_EMAIL;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.SEARCH_FLAG_OJ_ID;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.SEARCH_FLAG_QR;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.SRC_EVENT;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_BRANCH;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_COLLEGE;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_COLLEGE_REG_ID;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_EMAIL;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_EVENTS;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_EVENT_BRANCH;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_EVENT_NAME;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_EVENT_PARTICIPANTS;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_EVENT_RESULT;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_EVENT_TIME;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_KIT;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_MOBILE;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_NAME;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_OJASS_ID;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_PAID_AMOUNT;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_PHOTO;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_RECEIVED_BY;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_REMARK;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_TSHIRT;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_TSHIRT_SIZE;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_USERS;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.INTENT_PARAM_EVENT_BRANCH;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.INTENT_PARAM_EVENT_HASH;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.INTENT_PARAM_EVENT_NAME;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.INTENT_PARAM_SEARCH_FLAG;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.INTENT_PARAM_SEARCH_ID;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.INTENT_PARAM_SEARCH_SRC;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.SEARCH_FLAG_EMAIL;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.SEARCH_FLAG_OJ_ID;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.SEARCH_FLAG_QR;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.SRC_EVENT;
 
 public class UsersDetailsActivity extends AppCompatActivity implements View.OnClickListener{
 

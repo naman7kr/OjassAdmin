@@ -1,6 +1,4 @@
-package ojassadmin.nitjsr.in.ojassadmin;
-
-import android.widget.LinearLayout;
+package ojassadmin.nitjsr.in.ojassadmin.Models;
 
 import java.util.ArrayList;
 

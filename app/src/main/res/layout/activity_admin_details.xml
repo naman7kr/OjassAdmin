@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ojassadmin.nitjsr.in.ojassadmin.AdminDetailsActivity">
+    tools:context="ojassadmin.nitjsr.in.ojassadmin.Activities.AdminDetailsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -162,30 +162,86 @@
                 android:inputType="text"/>
 
         </LinearLayout>
-
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp">
-
-            <TextView
-                android:textSize="16sp"
-                android:layout_weight="0.25"
-                android:layout_gravity="center_vertical"
-                android:layout_width="0dp"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Access" />
-
-            <EditText
-                android:textSize="17sp"
-                android:layout_weight="0.75"
-                android:id="@+id/et_admin_access"
-                android:layout_width="0dp"
+                android:orientation="vertical">
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="User Search"
+                    android:id="@+id/check_user_search"
+                    android:layout_marginRight="20dp"
+                    />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:id="@+id/check_notifications"
+                    android:text="Notifications"
+                    android:layout_marginRight="20dp"
+                    />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Add User"
+                    android:id="@+id/check_add_user"
+                    android:layout_marginRight="20dp"
+                    />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="View Feedback"
+                    android:id="@+id/check_viewfeedback"
+                    android:layout_marginRight="20dp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:inputType="number"/>
+                android:orientation="vertical"
+                >
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Events"
+                    android:id="@+id/check_events"
+                    />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Admin Search"
+                    android:id="@+id/check_admin_search"
+                    />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="DB Info"
+                    android:id="@+id/check_db_info"
+                    />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Send Feeds"
+                    android:id="@+id/check_sendfeeds"
+                    />
+            </LinearLayout>
+
         </LinearLayout>
 
         <Button

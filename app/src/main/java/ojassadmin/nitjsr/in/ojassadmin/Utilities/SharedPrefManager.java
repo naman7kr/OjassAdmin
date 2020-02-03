@@ -1,4 +1,4 @@
-package ojassadmin.nitjsr.in.ojassadmin;
+package ojassadmin.nitjsr.in.ojassadmin.Utilities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 
 public class SharedPrefManager {
 
+    private static final String ADMIN_STATUS = "MainAdmin";
+    private static final String EMAIL_ID = "email";
     private SharedPreferences sharedPref;
     private SharedPreferences.Editor editor;
 
@@ -26,7 +28,12 @@ public class SharedPrefManager {
     public void setIsFirstOpen(boolean isFirstOpen){
         editor.putBoolean(IS_FIRST_OPEN, isFirstOpen).apply();
     }
-
+    public void setEmail(String email){
+        editor.putString(EMAIL_ID,email).apply();
+    }
+    public String getEmail(){
+        return sharedPref.getString(EMAIL_ID,null);
+    }
     public boolean isFirstOpen(){
         return sharedPref.getBoolean(IS_FIRST_OPEN, true);
     }
@@ -54,5 +61,10 @@ public class SharedPrefManager {
     public int getAccessLevel(){
         return sharedPref.getInt(ACCESS_LEVEL, 3);
     }
-
+    public void setAdminStatus(boolean status){
+        editor.putBoolean(ADMIN_STATUS,status).apply();
+    }
+    public boolean getAdminStatus(){
+        return  sharedPref.getBoolean(ADMIN_STATUS,false);
+    }
 }

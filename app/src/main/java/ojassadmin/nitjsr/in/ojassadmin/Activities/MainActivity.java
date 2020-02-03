@@ -1,4 +1,4 @@
-package ojassadmin.nitjsr.in.ojassadmin;
+package ojassadmin.nitjsr.in.ojassadmin.Activities;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -7,12 +7,14 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import androidx.appcompat.widget.Toolbar;
+
+import ojassadmin.nitjsr.in.ojassadmin.R;
+import ojassadmin.nitjsr.in.ojassadmin.Utilities.SharedPrefManager;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,18 +30,21 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_ACCESS_LEVEL;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_ADMIN;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.HIDE_OJASS_ID;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_SEARCH_FLAG;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_SEARCH_ID;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_SEARCH_SRC;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.SEARCH_FLAG_QR;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.SHOW_OJASS_ID;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.eventNames;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_ADMIN;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.HIDE_OJASS_ID;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.INTENT_PARAM_SEARCH_FLAG;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.INTENT_PARAM_SEARCH_ID;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.INTENT_PARAM_SEARCH_SRC;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.NO_OF_BUTTONS;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.SEARCH_FLAG_QR;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.SHOW_OJASS_ID;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.SubEventsMap;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.eventNames;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.StringEqualityPercentCheckUsingJaroWinklerDistance.getSimilarity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
+    private static final String LOG_TAG = "TAG";
     private Button btnSearch,btnEvents, btnNoti, btnAdmin, btnAddUser, btnDbInfo,viewfeedback,sendFeeds;
     private ImageView ivQR, ivLogout;
     private boolean isWarningShown;
@@ -56,13 +61,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //startActivity(new Intent(this, FeedsActivity.class));
 
         init();
+        initVisibility();
         setListeners();
         pDialog.show();
         //getEventHash();
-        updateAccess();
-        storeEvents();
-    }
 
+        updateAccess();
+
+        //store data
+        storeEvents();
+
+        storeSubEvents();
+    }
+    private void initVisibility(){
+        btnEvents.setVisibility(View.GONE);
+        btnSearch.setVisibility(View.GONE);
+        btnNoti.setVisibility(View.GONE);
+        btnAdmin.setVisibility(View.GONE);
+        btnAddUser.setVisibility(View.GONE);
+        btnDbInfo.setVisibility(View.GONE);
+//        ivQR.setVisibility(View.GONE);
+//        ivLogout.setVisibility(View.GONE);
+        viewfeedback.setVisibility(View.GONE);
+        sendFeeds.setVisibility(View.GONE);
+    }
     private void init() {
         user = FirebaseAuth.getInstance().getCurrentUser();
         sharedPref = new SharedPrefManager(this);
@@ -116,10 +138,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         eventNames.add(ds.getKey());
                     }
                 }
-                if(pflag==1){
+                if(pflag==2){
                     pDialog.dismiss();
                 }
-                pflag=1;
+                if(pflag==1){
+                    pflag=2;
+                }
+                if(pflag==0)
+                    pflag=1;
             }
 
             @Override
@@ -128,29 +154,90 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
+    private void storeSubEvents(){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Events");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
+                        String branch = ds.child("branch").getValue(String.class);
+
+                        double ma = 0.0;
+                        String bName = "";
+                        for (int i = 0; i < eventNames.size(); i++) {
+                            double match = getSimilarity(eventNames.get(i), branch);
+                            if (match > ma) {
+                                ma = match;
+                                bName = eventNames.get(i);
+                            }
+                        }
+//                        branch = bName;
+                        Log.e("TAG",""+branch);
+                        String name = ds.child("name").getValue(String.class);
+                        if (SubEventsMap.containsKey(branch)) {
+                            SubEventsMap.get(branch).add(name);
+                        } else {
+                            SubEventsMap.put(branch, new ArrayList<String>());
+                            boolean z = false;
+                            for (int i = 0; i < SubEventsMap.get(branch).size(); i++) {
+                                if (SubEventsMap.get(branch).get(i).equals(name)) {
+                                    z = true;
+                                    break;
+                                }
+                            }
+                            if (!z)
+                                SubEventsMap.get(branch).add(name);
+                        }
+
+                    }
+                    Log.e("TAG", String.valueOf(SubEventsMap.toString()));
+                    if(pflag==2){
+                        pDialog.dismiss();
+                    }
+                    if(pflag==1){
+                        pflag=2;
+                    }
+                    if(pflag==0)
+                        pflag=1;
+                } catch (Exception e) {
+//                    Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
     private void updateAccess() {
         DatabaseReference adminRef = FirebaseDatabase.getInstance().getReference(FIREBASE_REF_ADMIN).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        adminRef.keepSynced(true);
         adminRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+               int cnt = 0;
+               for(DataSnapshot ds: dataSnapshot.child("access").getChildren()){
+                   int accessNo = ds.getValue(Integer.class);
+                   showButton(accessNo);
+                   cnt++;
+               }
+               if(cnt == NO_OF_BUTTONS){
+                   sharedPref.setAdminStatus(true);
+               }else{
+                   sharedPref.setAdminStatus(false);
+               }
 
-                int accessLevel = Integer.parseInt(dataSnapshot.child(FIREBASE_REF_ACCESS_LEVEL).getValue().toString());
-                sharedPref.setAccessLevel(accessLevel);
-                if (sharedPref.getAccessLevel() < 3){ //Event Manager
-                    btnEvents.setVisibility(View.VISIBLE);
-                    btnNoti.setVisibility(View.VISIBLE);
-                }
-                if (sharedPref.getAccessLevel() < 2){ //Update Access
-                    btnAdmin.setVisibility(View.VISIBLE);
-                    btnAddUser.setVisibility(View.VISIBLE);
-                }
-                if (sharedPref.getAccessLevel() == 0) btnDbInfo.setVisibility(View.VISIBLE);
 
-                if(pflag==1){
+                if(pflag==2){
                     pDialog.dismiss();
                 }
-                pflag=1;
+                if(pflag==1){
+                    pflag=2;
+                }
+                if(pflag==0)
+                    pflag=1;
             }
 
             @Override
@@ -158,6 +245,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+    }
+
+    private void showButton(int accessNo) {
+        switch(accessNo){
+            case 0:
+                btnSearch.setVisibility(View.VISIBLE);
+                break;
+            case 1:
+                btnEvents.setVisibility(View.VISIBLE);
+                break;
+            case 2:
+                btnNoti.setVisibility(View.VISIBLE);
+                break;
+            case 3:
+                btnAdmin.setVisibility(View.VISIBLE);
+                break;
+            case 4:
+                btnAddUser.setVisibility(View.VISIBLE);
+                break;
+            case 5:
+                btnDbInfo.setVisibility(View.VISIBLE);
+                break;
+            case 6:
+                viewfeedback.setVisibility(View.VISIBLE);
+                break;
+            case 7:
+                sendFeeds.setVisibility(View.VISIBLE);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -191,9 +309,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (view == btnDbInfo){
             startActivity(new Intent(this, DBInfoActivity.class));
         }else if(view == viewfeedback){
-            startActivity(new Intent(MainActivity.this,FeedBackActivity.class));
+            startActivity(new Intent(MainActivity.this, FeedBackActivity.class));
         }else if(view == sendFeeds){
-            startActivity(new Intent(MainActivity.this,FeedsActivity.class));
+            startActivity(new Intent(MainActivity.this, FeedsActivity.class));
         }
     }
 

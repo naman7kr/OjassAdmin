@@ -1,23 +1,25 @@
-package ojassadmin.nitjsr.in.ojassadmin;
+package ojassadmin.nitjsr.in.ojassadmin.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import ojassadmin.nitjsr.in.ojassadmin.Models.FeedBack;
+import ojassadmin.nitjsr.in.ojassadmin.Adapters.FeedRecyclerViewAdapter;
+import ojassadmin.nitjsr.in.ojassadmin.R;
 
 import android.os.Bundle;
 import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class FeedBackActivity extends AppCompatActivity implements FeedRecyclerViewAdapter.SelectedItem {
+public class FeedBackActivity extends AppCompatActivity {
     RecyclerView feedlbacklist;
     FeedRecyclerViewAdapter adapter;
     ArrayList<FeedBack> list;
@@ -39,7 +41,12 @@ public class FeedBackActivity extends AppCompatActivity implements FeedRecyclerV
                 list.clear();
                 for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren())
                 {
-                    FeedBack feedBack=(FeedBack) dataSnapshot1.getValue(FeedBack.class);
+                    FeedBack feedBack= new FeedBack(dataSnapshot1.child("name").getValue(String.class),
+                                                    dataSnapshot1.child("email").getValue(String.class),
+                                                    dataSnapshot1.child("subject").getValue(String.class),
+                                                    dataSnapshot1.child("message").getValue(String.class),
+                                                    dataSnapshot1.child("timestamp").getValue(String.class));
+
                     feedBack.key=dataSnapshot1.getKey();
                     list.add(feedBack);
                     Log.d("asdf", "onDataChange: "+feedBack.key);
@@ -60,12 +67,8 @@ public class FeedBackActivity extends AppCompatActivity implements FeedRecyclerV
         list=new ArrayList<>();
         feedlbacklist=findViewById(R.id.feebackRecyclerView);
         feedlbacklist.setLayoutManager(new LinearLayoutManager(this));
-        adapter=new FeedRecyclerViewAdapter(list,this);
+        adapter=new FeedRecyclerViewAdapter(list);
         feedlbacklist.setAdapter(adapter);
     }
 
-    @Override
-    public void ItemSelected(int position) {
-        FirebaseDatabase.getInstance().getReference().child("feedback").child(list.get(position).key).removeValue();
-    }
 }

@@ -12,9 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FeedsActivity"></activity>
-        <activity android:name=".FeedBackActivity"></activity>
-        <activity android:name=".LoginActivity">
+        <activity android:name=".Activities.AdminListActivity"></activity>
+        <activity android:name=".Activities.FeedsActivity" />
+        <activity android:name=".Activities.FeedBackActivity" />
+        <activity android:name=".Activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,22 +26,22 @@
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
             tools:replace="screenOrientation" />
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".SearchActivity" />
-        <activity android:name=".DetailsActivity" />
-        <activity android:name=".EventsActivity" />
+        <activity android:name=".Activities.MainActivity" />
+        <activity android:name=".Activities.RegisterActivity" />
+        <activity android:name=".Activities.SearchActivity" />
+        <activity android:name=".Activities.DetailsActivity" />
+        <activity android:name=".Activities.EventsActivity" />
         <activity
-            android:name=".UsersDetailsActivity"
+            android:name=".Activities.UsersDetailsActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".NotificationActivity"
+            android:name=".Activities.NotificationActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".AdminDetailsActivity"
+            android:name=".Activities.AdminDetailsActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".AddUserActivity" />
-        <activity android:name=".DBInfoActivity" />
+        <activity android:name=".Activities.AddUserActivity" />
+        <activity android:name=".Activities.DBInfoActivity" />
     </application>
 
 </manifest>

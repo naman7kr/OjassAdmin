@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="40dp"
-    tools:context="ojassadmin.nitjsr.in.ojassadmin.SearchActivity">
+    tools:context="ojassadmin.nitjsr.in.ojassadmin.Activities.SearchActivity">
 
     <LinearLayout
         android:layout_margin="20dp"
@@ -77,6 +77,17 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/btn_admin_list"
+            android:layout_width="140dp"
+            android:layout_height="31dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/button_bg"
+            android:gravity="center"
+            android:text="Admins List"
+            android:textAllCaps="false"
+            android:textSize="@dimen/btn_text_size" />
         <Button
             android:textSize="@dimen/btn_text_size"
             android:textAllCaps="false"

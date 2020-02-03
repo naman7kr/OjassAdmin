@@ -1,4 +1,4 @@
-package ojassadmin.nitjsr.in.ojassadmin;
+package ojassadmin.nitjsr.in.ojassadmin.Utilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +16,7 @@ public class Constants {
     public static final String FIREBASE_REF_MOBILE = "mobile";
     public static final String FIREBASE_REF_COLLEGE = "college";
     public static final String FIREBASE_REF_COLLEGE_REG_ID = "regID";
+    public static final String FIREBASE_REF_ACCESS = "access";
     public static final String FIREBASE_REF_BRANCH = "branch";
     public static final String FIREBASE_REF_TSHIRT_SIZE = "tsirtSize";
     public static final String FIREBASE_REF_OJASS_ID = "ojassID";
@@ -56,7 +57,7 @@ public class Constants {
     public static final int SEARCH_FLAG_OJ_ID = 1;
     public static final int SEARCH_FLAG_EMAIL = 2;
     public static final int SEARCH_FLAG_QR = 3;
-
+    public static final int NO_OF_BUTTONS = 8;
     public static final String USER_DUMMY_IMAGE = "https://firebasestorage.googleapis.com/v0/b/ojass18-1cb0d.appspot.com/o/CoreTeamImages%2Fuserdp.png?alt=media&token=15f889fa-6f14-4e23-a259-001e3d017b50";
 
     public static final String EVENT_BRANCH[] = new String[]{
@@ -80,6 +81,7 @@ public class Constants {
             "Exposicion"
     };
     public static final ArrayList<String> eventNames = new ArrayList<>();
+    public static final HashMap<String, ArrayList<String>> SubEventsMap = new HashMap<>();
     public static final String[][] EventList = new String[][]{
             {"Select Branch"},
             {"Select Event","Autoquiz","Accelodrome","Junkyard Wars","Samveg","Prakshepan","Enigma","Ansys"},

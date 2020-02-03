@@ -1,6 +1,8 @@
-package ojassadmin.nitjsr.in.ojassadmin;
+package ojassadmin.nitjsr.in.ojassadmin.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants;
+import ojassadmin.nitjsr.in.ojassadmin.R;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,29 +14,18 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_NOTIFICATIONS;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_NOTIFICATIONS;
 
 public class NotificationActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -45,7 +36,7 @@ public class NotificationActivity extends AppCompatActivity implements View.OnCl
     private RequestQueue queue;
     private static final String VOLLEY_TAG = "VolleyTag";
     private static final String FCM_KEY = "AAAAX90eYv8:APA91bG_JJUSsjVJfntkCsVDGn-_0oecmrV4QX-fOeqP2WZr6R8bSlUX8_4NyAlg6ElfzqYqQSkK-ctRZ4zHh21ziPDpqR6wSl_w4A4k_a9GdyvN5B3--qNeUI6zn80HOkNrKgLg5irD";
-    ArrayList<String> notiList = new ArrayList<>();
+    ArrayList<String> notiList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,8 +59,9 @@ public class NotificationActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void setSpinner() {
+        notiList = new ArrayList<>();
         notiList.clear();
-        notiList = Constants.eventNames;
+        notiList.addAll(Constants.eventNames);
         notiList.add(0,"Ojass");
         ArrayAdapter arrayAdapter = new ArrayAdapter(this,R.layout.spinner_item, notiList);
         arrayAdapter.setDropDownViewResource(R.layout.spinner_item);

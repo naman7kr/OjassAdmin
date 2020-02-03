@@ -1,8 +1,10 @@
-package ojassadmin.nitjsr.in.ojassadmin;
+package ojassadmin.nitjsr.in.ojassadmin.Activities;
 
 import android.app.ProgressDialog;
 import android.os.Environment;
 import androidx.appcompat.app.AppCompatActivity;
+import ojassadmin.nitjsr.in.ojassadmin.R;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -18,14 +20,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_KIT;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_NAME;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_OJASS_ID;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_PAID_AMOUNT;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_TSHIRT;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_TSHIRT_SIZE;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_USERS;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.TSHIRT_SIZE;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_KIT;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_NAME;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_OJASS_ID;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_PAID_AMOUNT;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_TSHIRT;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_TSHIRT_SIZE;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_USERS;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.TSHIRT_SIZE;
 
 public class DBInfoActivity extends AppCompatActivity {
 

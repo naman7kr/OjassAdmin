@@ -1,18 +1,26 @@
-package ojassadmin.nitjsr.in.ojassadmin;
+package ojassadmin.nitjsr.in.ojassadmin.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import ojassadmin.nitjsr.in.ojassadmin.Models.Comments;
+import ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants;
+import ojassadmin.nitjsr.in.ojassadmin.Models.FeedPost;
+import ojassadmin.nitjsr.in.ojassadmin.Models.Likes;
+import ojassadmin.nitjsr.in.ojassadmin.R;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,17 +38,20 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.SubEventsMap;
+
 public class FeedsActivity extends AppCompatActivity {
 
     FirebaseDatabase mDatabase;
     FirebaseUser mUser;
-    EditText mEvent, mSubevent, mBody;
+    EditText mBody;
+    Spinner mEvent,mSubevent;
     TextView mSelectImageTextView, mImagePathTextView;
     Button mPublish, mClear;
     CardView mLoader;
     LinearLayout mMainLayout;
     Uri mSelectedImageUri;
-
+    ArrayList<String> eventList,subEventList;
     String mSelectedImageDownloadURL;
 
     private static int IMAGE_PICK_REQUEST_CODE = 0;
@@ -50,15 +61,17 @@ public class FeedsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feeds);
+        initialize();
         mDatabase = FirebaseDatabase.getInstance();
         mUser = FirebaseAuth.getInstance().getCurrentUser();
-
+        setEventsSpinner();
+        setSubEventsSpinner();
         if(mUser == null){
             Toast.makeText(this, "Not Authenticated!", Toast.LENGTH_SHORT).show();
             finish();
         }
 
-        initialize();
+
     }
 
     private void initialize(){
@@ -100,15 +113,41 @@ public class FeedsActivity extends AppCompatActivity {
             }
         });
     }
+    private void setEventsSpinner() {
+        eventList = new ArrayList<>();
+        eventList.clear();
+        eventList.addAll(Constants.eventNames);
+        eventList.add(0,"Ojass");
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this,R.layout.spinner_item, eventList);
+        arrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+        mEvent.setAdapter(arrayAdapter);
+        mEvent.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                setSubEventsSpinner();
+            }
 
-    private void validateAndPublish(){
-        if((mEvent.getText().toString()).equals("")){
-            Toast.makeText(this, "Please enter event name", Toast.LENGTH_SHORT).show();
-            return;
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+    private void setSubEventsSpinner(){
+        subEventList = new ArrayList<>();
+        subEventList.clear();
+        if(mEvent.getSelectedItem().toString().compareTo("Ojass")==0){
+            subEventList.add(0,"The annual TechnoManagement fest of NIT Jamshedpur");
+        }else {
+            subEventList.addAll(SubEventsMap.get(mEvent.getSelectedItem().toString()));
         }
-
-        if((mSubevent.getText().toString()).equals("")){
-            Toast.makeText(this, "Please enter sub-event name", Toast.LENGTH_SHORT).show();
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this,R.layout.spinner_item, subEventList);
+        arrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+        mSubevent.setAdapter(arrayAdapter);
+    }
+    private void validateAndPublish(){
+        if((mEvent.getSelectedItem().toString()).equals("")){
+            Toast.makeText(this, "Please enter event name", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -126,9 +165,9 @@ public class FeedsActivity extends AppCompatActivity {
             final FeedPost post = new FeedPost(
                     currentTime,
                     mBody.getText().toString(),
-                    mEvent.getText().toString(),
+                    mEvent.getSelectedItem().toString(),
                     mSelectedImageDownloadURL,
-                    mSubevent.getText().toString(),
+                    mSubevent.getSelectedItem().toString(),
                     new ArrayList<Likes>(),
                     new ArrayList<Comments>()
             );
@@ -175,9 +214,9 @@ public class FeedsActivity extends AppCompatActivity {
                         final FeedPost post = new FeedPost(
                                 currentTime,
                                 mBody.getText().toString(),
-                                mEvent.getText().toString(),
+                                mEvent.getSelectedItem().toString(),
                                 mSelectedImageDownloadURL,
-                                mSubevent.getText().toString(),
+                                mSubevent.getSelectedItem().toString(),
                                 new ArrayList<Likes>(),
                                 new ArrayList<Comments>()
                         );

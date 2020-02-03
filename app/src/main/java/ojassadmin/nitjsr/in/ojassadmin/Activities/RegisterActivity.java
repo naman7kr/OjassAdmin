@@ -1,10 +1,14 @@
-package ojassadmin.nitjsr.in.ojassadmin;
+package ojassadmin.nitjsr.in.ojassadmin.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
+import ojassadmin.nitjsr.in.ojassadmin.R;
+import ojassadmin.nitjsr.in.ojassadmin.Utilities.SharedPrefManager;
+
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,13 +20,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_ACCESS_LEVEL;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_BRANCH;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_COLLEGE_REG_ID;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_EMAIL;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_MOBILE;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_NAME;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_PHOTO;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_BRANCH;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_COLLEGE_REG_ID;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_EMAIL;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_MOBILE;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_NAME;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_PHOTO;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -74,17 +77,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             progressDialog.setMessage("Please wait...");
             progressDialog.show();
             String uid = user.getUid();
+
             rootReference.child(uid).child(FIREBASE_REF_NAME).setValue(user.getDisplayName());
-            rootReference.child(uid).child(FIREBASE_REF_EMAIL).setValue(user.getEmail());
+            rootReference.child(uid).child(FIREBASE_REF_EMAIL).setValue(sharedPrefManager.getEmail());
             rootReference.child(uid).child(FIREBASE_REF_MOBILE).setValue(inputMobile);
             rootReference.child(uid).child(FIREBASE_REF_BRANCH).setValue(inputBranch);
             rootReference.child(uid).child(FIREBASE_REF_COLLEGE_REG_ID).setValue(inputRegID);
-            rootReference.child(uid).child(FIREBASE_REF_ACCESS_LEVEL).setValue("3");
             rootReference.child(uid).child(FIREBASE_REF_PHOTO).setValue(user.getPhotoUrl().toString());
 
             sharedPrefManager.setIsRegistered(true);
 
-            startActivity(new Intent(RegisterActivity.this,MainActivity.class));
+            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
             finish();
         } else {
             Toast.makeText(this, "Fields can't be left blank!", Toast.LENGTH_SHORT).show();

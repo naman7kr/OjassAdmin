@@ -1,9 +1,12 @@
-package ojassadmin.nitjsr.in.ojassadmin;
+package ojassadmin.nitjsr.in.ojassadmin.Activities;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
+import ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants;
+import ojassadmin.nitjsr.in.ojassadmin.R;
+
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -25,18 +28,18 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.util.HashMap;
 
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_EVENTS;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.FIREBASE_REF_EVENT_PARTICIPANTS;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_EVENT_BRANCH;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_EVENT_HASH;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_EVENT_NAME;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_SEARCH_FLAG;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_SEARCH_ID;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.INTENT_PARAM_SEARCH_SRC;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.SEARCH_FLAG_EMAIL;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.SEARCH_FLAG_OJ_ID;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.SEARCH_FLAG_QR;
-import static ojassadmin.nitjsr.in.ojassadmin.Constants.SRC_EVENT;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_EVENTS;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_EVENT_PARTICIPANTS;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.INTENT_PARAM_EVENT_BRANCH;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.INTENT_PARAM_EVENT_HASH;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.INTENT_PARAM_EVENT_NAME;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.INTENT_PARAM_SEARCH_FLAG;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.INTENT_PARAM_SEARCH_ID;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.INTENT_PARAM_SEARCH_SRC;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.SEARCH_FLAG_EMAIL;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.SEARCH_FLAG_OJ_ID;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.SEARCH_FLAG_QR;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.SRC_EVENT;
 
 public class EventsActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -244,7 +247,7 @@ public class EventsActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void openUserDetail(String ID, int FLAG){
-        Intent intent=new Intent(EventsActivity.this,UsersDetailsActivity.class);
+        Intent intent=new Intent(EventsActivity.this, UsersDetailsActivity.class);
         intent.putExtra(INTENT_PARAM_SEARCH_FLAG, FLAG);
         intent.putExtra(INTENT_PARAM_SEARCH_ID, ID);
         intent.putExtra(INTENT_PARAM_SEARCH_SRC, SRC_EVENT);
