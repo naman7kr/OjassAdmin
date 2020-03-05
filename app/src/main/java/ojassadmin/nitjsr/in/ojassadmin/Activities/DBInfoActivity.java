@@ -21,7 +21,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_KIT;
-import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_NAME;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_USERNAME;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_OJASS_ID;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_PAID_AMOUNT;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_TSHIRT;
@@ -50,54 +50,56 @@ public class DBInfoActivity extends AppCompatActivity {
         userRef = FirebaseDatabase.getInstance().getReference(FIREBASE_REF_USERS);
         runMasterQuery();
 
-        findViewById(R.id.export_excel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pd.show();
-                exportToExcel();
-            }
-        });
+        findViewById(R.id.export_excel).setVisibility(View.GONE);
+
+//        findViewById(R.id.export_excel).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                pd.show();
+//                exportToExcel();
+//            }
+//        });
 
     }
 
-    private void exportToExcel() {
-        String baseDir = Environment.getExternalStorageDirectory().getAbsolutePath();
-        String fileName = "OjassData.csv";
-        String filePath = baseDir + File.separator + fileName;
-        File f = new File(filePath);
-        FileWriter mFileWriter;
-        try {
-            if (f.exists() && !f.isDirectory()) {
-                mFileWriter = new FileWriter(filePath, true);
-                writer = new CSVWriter(mFileWriter);
-            }
-            else writer = new CSVWriter(new FileWriter(filePath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                int count = 0;
-                for (DataSnapshot userData : dataSnapshot.getChildren()){
-                    if (userData.child(FIREBASE_REF_OJASS_ID).exists()){
-                        count++;
-                        String row[] = new String[2];
-                        row[0] = userData.child(FIREBASE_REF_OJASS_ID).getValue().toString();
-                        row[1] = userData.child(FIREBASE_REF_NAME).getValue().toString();
-                        writer.writeNext(row);
-                    }
-                }
-                //Toast.makeText(DBInfoActivity.this, ""+count, Toast.LENGTH_SHORT).show();
-                pd.dismiss();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
+//    private void exportToExcel() {
+//        String baseDir = Environment.getExternalStorageDirectory().getAbsolutePath();
+//        String fileName = "OjassData.csv";
+//        String filePath = baseDir + File.separator + fileName;
+//        File f = new File(filePath);
+//        FileWriter mFileWriter;
+//        try {
+//            if (f.exists() && !f.isDirectory()) {
+//                mFileWriter = new FileWriter(filePath, true);
+//                writer = new CSVWriter(mFileWriter);
+//            }
+//            else writer = new CSVWriter(new FileWriter(filePath));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                int count = 0;
+//                for (DataSnapshot userData : dataSnapshot.getChildren()){
+//                    if (userData.child(FIREBASE_REF_OJASS_ID).exists()){
+//                        count++;
+//                        String row[] = new String[2];
+//                        row[0] = userData.child(FIREBASE_REF_OJASS_ID).getValue().toString();
+//                        row[1] = userData.child(FIREBASE_REF_USERNAME).getValue().toString();
+//                        writer.writeNext(row);
+//                    }
+//                }
+//                //Toast.makeText(DBInfoActivity.this, ""+count, Toast.LENGTH_SHORT).show();
+//                pd.dismiss();
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
     private void runMasterQuery(){
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -162,153 +164,4 @@ public class DBInfoActivity extends AppCompatActivity {
             }
         });
     }
-
-    /*private void prepareInfo() {
-        prepareTotal();
-        runMasterQuery();
-        prepareTshirtInfo("XS");
-        prepareTshirtInfo("S");
-        prepareTshirtInfo("M");
-        prepareTshirtInfo("L");
-        prepareTshirtInfo("XL");
-        prepareTshirtInfo("XXL");
-        preparePaidInfo("500");
-        preparePaidInfo("350");
-        preparePaidInfo("300");
-        prepareTotalPaidInfo();
-        prepareTshirtGivenInfo();
-        prepareKitGivenInfo();
-    }
-
-    private void prepareTotal() {
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ((TextView)findViewById(R.id.tv_info_total)).setText(""+dataSnapshot.getChildrenCount());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void prepareTshirtInfo(final String s) {
-        Query query = userRef.orderByChild(FIREBASE_REF_TSHIRT_SIZE).equalTo(s);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                switch (s){
-                    case "XS" : ((TextView)findViewById(R.id.tv_info_xs)).setText(""+dataSnapshot.getChildrenCount());
-                        break;
-                    case "S" : ((TextView)findViewById(R.id.tv_info_s)).setText(""+dataSnapshot.getChildrenCount());
-                        break;
-                    case "M" : ((TextView)findViewById(R.id.tv_info_m)).setText(""+dataSnapshot.getChildrenCount());
-                        break;
-                    case "L" : ((TextView)findViewById(R.id.tv_info_l)).setText(""+dataSnapshot.getChildrenCount());
-                        break;
-                    case "XL" : ((TextView)findViewById(R.id.tv_info_xl)).setText(""+dataSnapshot.getChildrenCount());
-                        break;
-                    case "XXL" : ((TextView)findViewById(R.id.tv_info_xxl)).setText(""+dataSnapshot.getChildrenCount());
-                        break;
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void preparePaidInfo(final String amount) {
-        Query query = userRef.orderByChild(FIREBASE_REF_PAID_AMOUNT).equalTo(amount);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                int count = (int) dataSnapshot.getChildrenCount();
-                switch (amount){
-                    case "500" :
-                        ((TextView)findViewById(R.id.tv_info_paid_500)).setText(count + " ( \u20B9" + (count * 500) + ")");
-                        break;
-                    case "350" :
-                        ((TextView)findViewById(R.id.tv_info_paid_350)).setText(count + " ( \u20B9" + (count * 350) + ")");
-                        break;
-                    case "300" :
-                        ((TextView)findViewById(R.id.tv_info_paid_300)).setText(count + " ( \u20B9" + (count * 300) + ")");
-                        break;
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-
-
-    private void prepareTshirtGivenInfo() {
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                int count = 0;
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
-                    if (dataSnapshot1.child(FIREBASE_REF_TSHIRT).exists()) count++;
-                }
-                ((TextView)findViewById(R.id.tv_info_tshirt_given)).setText(""+count);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void prepareKitGivenInfo() {
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                int count = 0;
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
-                    if (dataSnapshot1.child(FIREBASE_REF_KIT).exists()){
-                        count++;
-                    }
-                }
-                ((TextView)findViewById(R.id.tv_info_kit_given)).setText(""+count);
-                if (pd.isShowing()) pd.dismiss();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void prepareTotalPaidInfo() {
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                int count = 0;
-                long totalAmount = 0l;
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
-                    if (dataSnapshot1.child(FIREBASE_REF_PAID_AMOUNT).exists()){
-                        totalAmount += Long.parseLong(dataSnapshot1.child(FIREBASE_REF_PAID_AMOUNT).getValue().toString());
-                        count++;
-                    }
-                }
-                ((TextView)findViewById(R.id.tv_info_paid_total)).setText(""+count+" ( \u20B9"+totalAmount+")");
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }*/
-
 }

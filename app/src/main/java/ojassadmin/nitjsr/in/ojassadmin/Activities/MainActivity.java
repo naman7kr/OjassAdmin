@@ -39,6 +39,7 @@ import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.NO_OF_BUTTONS;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.SEARCH_FLAG_QR;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.SHOW_OJASS_ID;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.SubEventsMap;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.eventHash;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.eventNames;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.StringEqualityPercentCheckUsingJaroWinklerDistance.getSimilarity;
 
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         storeEvents();
 
         storeSubEvents();
+
     }
     private void initVisibility(){
         btnEvents.setVisibility(View.GONE);
@@ -104,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ivLogout = findViewById(R.id.iv_logout);
         viewfeedback=findViewById(R.id.feedbackPage);
         sendFeeds = findViewById(R.id.btn_feeds);
+
     }
     private void setListeners(){
         btnEvents.setOnClickListener(this);
@@ -176,6 +179,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                        branch = bName;
                         Log.e("TAG",""+branch);
                         String name = ds.child("name").getValue(String.class);
+                        eventHash.put(name,ds.getKey());
                         if (SubEventsMap.containsKey(branch)) {
                             SubEventsMap.get(branch).add(name);
                         } else {
@@ -192,7 +196,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
 
                     }
-                    Log.e("TAG", String.valueOf(SubEventsMap.toString()));
                     if(pflag==2){
                         pDialog.dismiss();
                     }

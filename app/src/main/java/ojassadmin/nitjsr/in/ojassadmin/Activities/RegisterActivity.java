@@ -8,7 +8,6 @@ import ojassadmin.nitjsr.in.ojassadmin.Utilities.SharedPrefManager;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +23,7 @@ import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_B
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_COLLEGE_REG_ID;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_EMAIL;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_MOBILE;
-import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_NAME;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_USERNAME;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_PHOTO;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener{
@@ -78,7 +77,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             progressDialog.show();
             String uid = user.getUid();
 
-            rootReference.child(uid).child(FIREBASE_REF_NAME).setValue(user.getDisplayName());
+            rootReference.child(uid).child(FIREBASE_REF_USERNAME).setValue(user.getDisplayName());
             rootReference.child(uid).child(FIREBASE_REF_EMAIL).setValue(sharedPrefManager.getEmail());
             rootReference.child(uid).child(FIREBASE_REF_MOBILE).setValue(inputMobile);
             rootReference.child(uid).child(FIREBASE_REF_BRANCH).setValue(inputBranch);

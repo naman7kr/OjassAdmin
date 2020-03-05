@@ -35,13 +35,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_ACCESS;
-import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_ACCESS_LEVEL;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_ADMIN;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_BRANCH;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_COLLEGE_REG_ID;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_EMAIL;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_MOBILE;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_NAME;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_USERNAME;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_PHOTO;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.INTENT_PARAM_SEARCH_FLAG;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.INTENT_PARAM_SEARCH_ID;
@@ -81,14 +81,15 @@ public class AdminDetailsActivity extends AppCompatActivity implements View.OnCl
         final String ID = intent.getStringExtra(INTENT_PARAM_SEARCH_ID);
         final int SEARCH_FLAG = intent.getIntExtra(INTENT_PARAM_SEARCH_FLAG, 0);
 
-        prohibitEdit();
-        searchUser(SEARCH_FLAG, ID);
-
         if(checkMainAdmin())
             ibEdit.setVisibility(View.VISIBLE);
         else{
             ibEdit.setVisibility(View.GONE);
         }
+
+        prohibitEdit();
+        searchUser(SEARCH_FLAG, ID);
+
     }
 
     private boolean checkMainAdmin() {
@@ -136,6 +137,7 @@ public class AdminDetailsActivity extends AppCompatActivity implements View.OnCl
         if (!TextUtils.isEmpty(userHashID) && userHashID.equals(mUser.getUid())){
             btnUpdate.setText("Log Out");
             btnUpdate.setVisibility(View.VISIBLE);
+            ibEdit.setVisibility(View.GONE);
         }
     }
 
@@ -191,7 +193,7 @@ public class AdminDetailsActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void sendDataToServer() {
-        adminRef.child(userHashID).child(FIREBASE_REF_NAME).setValue(etName.getText().toString());
+        adminRef.child(userHashID).child(FIREBASE_REF_USERNAME).setValue(etName.getText().toString());
         adminRef.child(userHashID).child(FIREBASE_REF_EMAIL).setValue(etEmail.getText().toString());
         adminRef.child(userHashID).child(FIREBASE_REF_MOBILE).setValue(etNumber.getText().toString());
         adminRef.child(userHashID).child(FIREBASE_REF_BRANCH).setValue(etBranch.getText().toString());
@@ -321,7 +323,7 @@ public class AdminDetailsActivity extends AppCompatActivity implements View.OnCl
     private void fillData(DataSnapshot dataSnapshot) {
         if (pd.isShowing()) pd.dismiss();
         try {
-            Log.e("ADMIN",dataSnapshot.child(FIREBASE_REF_NAME).getValue(String.class));
+            Log.e("hello",dataSnapshot.child(FIREBASE_REF_NAME).getValue(String.class));
             etName.setText(dataSnapshot.child(FIREBASE_REF_NAME).getValue().toString());
             etNumber.setText(dataSnapshot.child(FIREBASE_REF_MOBILE).getValue().toString());
             etEmail.setText(dataSnapshot.child(FIREBASE_REF_EMAIL).getValue().toString());

@@ -9,6 +9,7 @@ import ojassadmin.nitjsr.in.ojassadmin.Utilities.SharedPrefManager;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -48,7 +49,7 @@ import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_E
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_EVENT_TIME;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_KIT;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_MOBILE;
-import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_NAME;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_USERNAME;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_OJASS_ID;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_PAID_AMOUNT;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_PHOTO;
@@ -84,6 +85,7 @@ public class UsersDetailsActivity extends AppCompatActivity implements View.OnCl
     private static final String NOT_REGISTERED = "Not Registered";
     private static final String EMAIL_API = "http://ojass.in/mail.php";
     private String oldVerifier = "";
+    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +105,8 @@ public class UsersDetailsActivity extends AppCompatActivity implements View.OnCl
         pd.setMessage("Fetching User...");
         pd.setTitle("Please Wait");
         pd.setCancelable(false);
+
+        email = sharedPref.getEmail();
 
         userName=(EditText)findViewById(R.id.edit_text_user_name);
         userName.setEnabled(false);
@@ -146,7 +150,7 @@ public class UsersDetailsActivity extends AppCompatActivity implements View.OnCl
     private void handleButtonVisibility(int search_src) {
         if (search_src == SRC_EVENT)
             btnAddUser.setVisibility(View.VISIBLE);
-        else if (sharedPref.getAccessLevel() < 2)
+//        else if (sharedPref.getAccessLevel() < 2)
             findViewById(R.id.ib_edit_profile).setVisibility(View.VISIBLE);
     }
 
@@ -167,7 +171,7 @@ public class UsersDetailsActivity extends AppCompatActivity implements View.OnCl
         pd.show();
         switch (search_flag){
             case SEARCH_FLAG_OJ_ID :
-                userDataRef.orderByChild(FIREBASE_REF_OJASS_ID).equalTo("OJ18"+id).addListenerForSingleValueEvent(new ValueEventListener() {
+                userDataRef.orderByChild(FIREBASE_REF_OJASS_ID).equalTo("OJ20"+id).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.getValue() != null){
@@ -230,15 +234,17 @@ public class UsersDetailsActivity extends AppCompatActivity implements View.OnCl
         Picasso.with(this).load(dataSnapshot.child(FIREBASE_REF_PHOTO).getValue().toString()).fit().into((ImageView)findViewById(R.id.iv_user_image));
         if (dataSnapshot.child(FIREBASE_REF_OJASS_ID).exists()) userOjassID.setText(dataSnapshot.child(FIREBASE_REF_OJASS_ID).getValue().toString().substring(4));
         else {
-            btnAddUser.setVisibility(View.GONE);
+//            btnAddUser.setVisibility(View.GONE);
             userOjassID.setText(NOT_REGISTERED);
         }
         userHash.setText(userHashID);
-        userName.setText(dataSnapshot.child(FIREBASE_REF_NAME).getValue().toString());
+        userName.setText(dataSnapshot.child(FIREBASE_REF_USERNAME).getValue().toString());
         userEmail.setText(dataSnapshot.child(FIREBASE_REF_EMAIL).getValue().toString());
         userMobile.setText(dataSnapshot.child(FIREBASE_REF_MOBILE).getValue().toString());
         userInstitute.setText(dataSnapshot.child(FIREBASE_REF_COLLEGE).getValue().toString());
-        userRegNo.setText(dataSnapshot.child(FIREBASE_REF_COLLEGE_REG_ID).getValue().toString());
+        if(dataSnapshot.child(FIREBASE_REF_COLLEGE_REG_ID).exists()){
+            userRegNo.setText(dataSnapshot.child(FIREBASE_REF_COLLEGE_REG_ID).getValue().toString());
+        }
         userBranch.setText(dataSnapshot.child(FIREBASE_REF_BRANCH).getValue().toString());
         if (dataSnapshot.child(FIREBASE_REF_PAID_AMOUNT).exists()){
             trackPayment = false;
@@ -286,7 +292,7 @@ public class UsersDetailsActivity extends AppCompatActivity implements View.OnCl
         userDataRef.child(userHashID).child(FIREBASE_REF_EVENTS).child(EVENT_HASH).child(FIREBASE_REF_EVENT_NAME).setValue(EVENT_SELECTED);
         userDataRef.child(userHashID).child(FIREBASE_REF_EVENTS).child(EVENT_HASH).child(FIREBASE_REF_EVENT_RESULT).setValue("TBA");
         userDataRef.child(userHashID).child(FIREBASE_REF_EVENTS).child(EVENT_HASH).child(FIREBASE_REF_EVENT_TIME).setValue(""+System.currentTimeMillis());
-        eventReference.child(EVENT_HASH).child(FIREBASE_REF_EVENT_PARTICIPANTS).child(userHashID).child(FIREBASE_REF_NAME).setValue(userName.getText().toString());
+        eventReference.child(EVENT_HASH).child(FIREBASE_REF_EVENT_PARTICIPANTS).child(userHashID).child(FIREBASE_REF_USERNAME).setValue(userName.getText().toString());
         eventReference.child(EVENT_HASH).child(FIREBASE_REF_EVENT_PARTICIPANTS).child(userHashID).child(FIREBASE_REF_OJASS_ID).setValue(userOjassID.getText().toString());
         Toast.makeText(UsersDetailsActivity.this, "Participant added", Toast.LENGTH_SHORT).show();
         finish();
@@ -294,14 +300,14 @@ public class UsersDetailsActivity extends AppCompatActivity implements View.OnCl
 
     private void sendValueToServer() {
         DatabaseReference hashRef = userDataRef.child(userHashID);
-        hashRef.child(FIREBASE_REF_NAME).setValue(userName.getText().toString());
+        hashRef.child(FIREBASE_REF_USERNAME).setValue(userName.getText().toString());
         hashRef.child(FIREBASE_REF_COLLEGE).setValue(userInstitute.getText().toString());
         hashRef.child(FIREBASE_REF_COLLEGE_REG_ID).setValue(userRegNo.getText().toString());
         hashRef.child(FIREBASE_REF_BRANCH).setValue(userBranch.getText().toString());
         hashRef.child(FIREBASE_REF_TSHIRT_SIZE).setValue(sizeSpinner.getSelectedItem().toString().split(" ")[0]);
         if (!TextUtils.isEmpty(userRemarks.getText().toString())) hashRef.child(FIREBASE_REF_REMARK).setValue(userRemarks.getText().toString());
-        if (trackTshirt && tShirtCheckBox.isChecked()) hashRef.child(FIREBASE_REF_TSHIRT).setValue(user.getEmail());
-        if (trackKit && kitCheckBox.isChecked()) hashRef.child(FIREBASE_REF_KIT).setValue(user.getEmail());
+        if (trackTshirt && tShirtCheckBox.isChecked()) hashRef.child(FIREBASE_REF_TSHIRT).setValue(email);
+        if (trackKit && kitCheckBox.isChecked()) hashRef.child(FIREBASE_REF_KIT).setValue(email);
         if (trackPayment) {
             if (!TextUtils.isEmpty(userPaymentDetails.getText()) && TextUtils.isEmpty(userOjassID.getText().toString())){
                 Toast.makeText(this, "Enter Ojass ID or remove payment", Toast.LENGTH_LONG).show();
@@ -309,59 +315,59 @@ public class UsersDetailsActivity extends AppCompatActivity implements View.OnCl
             } else if (TextUtils.isEmpty(userPaymentDetails.getText()) && !TextUtils.isEmpty(userOjassID.getText().toString())) {
                 Toast.makeText(this, "Enter amount or remove Ojass id", Toast.LENGTH_LONG).show();
                 return;
-            } else if (!TextUtils.isEmpty(userPaymentDetails.getText()) && !TextUtils.isEmpty(userOjassID.getText().toString())) {
-                callEmailAPI(userEmail.getText().toString(), userName.getText().toString(), "OJ18"+userOjassID.getText().toString(), userHashID, hashRef);
+            } else {
+                hashRef.child(FIREBASE_REF_PAID_AMOUNT).setValue(userPaymentDetails.getText().toString());
+                if (!TextUtils.isEmpty(userOjassID.getText().toString()) && !userOjassID.getText().toString().equals(NOT_REGISTERED))
+                    hashRef.child(FIREBASE_REF_OJASS_ID).setValue("OJ20"+userOjassID.getText().toString());
+                if (!oldVerifier.equals(email))
+                    hashRef.child(FIREBASE_REF_RECEIVED_BY).setValue(oldVerifier + " " + email);
                 return;
             }
-        } else if (sharedPref.getAccessLevel() == 0){
-            hashRef.child(FIREBASE_REF_PAID_AMOUNT).setValue(userPaymentDetails.getText().toString());
-            if (!TextUtils.isEmpty(userOjassID.getText().toString()) && !userOjassID.getText().toString().equals(NOT_REGISTERED)) hashRef.child(FIREBASE_REF_OJASS_ID).setValue("OJ18"+userOjassID.getText().toString());
-            if (!oldVerifier.equals(user.getEmail())) hashRef.child(FIREBASE_REF_RECEIVED_BY).setValue(oldVerifier + " " + user.getEmail());
         }
         Toast.makeText(this, "Values updated!", Toast.LENGTH_SHORT).show();
         finish();
     }
 
-    private void allotOJID(DatabaseReference hashRef, String OJID) {
-        hashRef.child(FIREBASE_REF_PAID_AMOUNT).setValue(userPaymentDetails.getText().toString());
-        hashRef.child(FIREBASE_REF_OJASS_ID).setValue(OJID);
-        hashRef.child(FIREBASE_REF_RECEIVED_BY).setValue(user.getEmail());
-    }
+//    private void allotOJID(DatabaseReference hashRef, String OJID) {
+//        hashRef.child(FIREBASE_REF_PAID_AMOUNT).setValue(userPaymentDetails.getText().toString());
+//        hashRef.child(FIREBASE_REF_OJASS_ID).setValue(OJID);
+//        hashRef.child(FIREBASE_REF_RECEIVED_BY).setValue(email);
+//    }
 
-    private void callEmailAPI(final String email, final String name, final String ojID, final String userHashID, final DatabaseReference hashRef) {
-        allotOJID(hashRef, ojID);
-        final ProgressDialog pd = new ProgressDialog(this);
-        pd.setTitle("Please Wait");
-        pd.setMessage("Registering User...");
-        pd.setCancelable(false);
-        pd.show();
-        StringRequest request = new StringRequest(POST, EMAIL_API, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if (pd.isShowing()) pd.dismiss();
-                if (response.equals("1")) Toast.makeText(UsersDetailsActivity.this, "User successfully registered!", Toast.LENGTH_SHORT).show();
-                else Toast.makeText(UsersDetailsActivity.this, response, Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(UsersDetailsActivity.this, ""+error.getMessage(), Toast.LENGTH_SHORT).show();
-                if (pd.isShowing()) pd.dismiss();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("email", email);
-                params.put("name", name);
-                params.put("hash", userHashID);
-                params.put("ojassId", ojID);
-                return params;
-            }
-        };
-        Volley.newRequestQueue(this).add(request);
-    }
+//    private void callEmailAPI(final String email, final String name, final String ojID, final String userHashID, final DatabaseReference hashRef) {
+//        allotOJID(hashRef, ojID);
+//        final ProgressDialog pd = new ProgressDialog(this);
+//        pd.setTitle("Please Wait");
+//        pd.setMessage("Registering User...");
+//        pd.setCancelable(false);
+//        pd.show();
+//        StringRequest request = new StringRequest(POST, EMAIL_API, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                if (pd.isShowing()) pd.dismiss();
+//                if (response.equals("1")) Toast.makeText(UsersDetailsActivity.this, "User successfully registered!", Toast.LENGTH_SHORT).show();
+//                else Toast.makeText(UsersDetailsActivity.this, response, Toast.LENGTH_SHORT).show();
+//                finish();
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(UsersDetailsActivity.this, ""+error.getMessage(), Toast.LENGTH_SHORT).show();
+//                if (pd.isShowing()) pd.dismiss();
+//            }
+//        }){
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                Map<String, String> params = new HashMap<>();
+//                params.put("email", email);
+//                params.put("name", name);
+//                params.put("hash", userHashID);
+//                params.put("ojassId", ojID);
+//                return params;
+//            }
+//        };
+//        Volley.newRequestQueue(this).add(request);
+//    }
 
     private void enableEdit() {
         findViewById(R.id.ib_edit_profile).setVisibility(View.GONE);

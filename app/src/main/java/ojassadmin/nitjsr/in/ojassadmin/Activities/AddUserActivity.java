@@ -29,7 +29,7 @@ import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_C
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_EMAIL;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_KIT;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_MOBILE;
-import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_NAME;
+import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_USERNAME;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_PHOTO;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_TSHIRT;
 import static ojassadmin.nitjsr.in.ojassadmin.Utilities.Constants.FIREBASE_REF_TSHIRT_SIZE;
@@ -56,6 +56,7 @@ public class AddUserActivity extends AppCompatActivity {
         pd = new ProgressDialog(this);
         pd.setTitle("Please Wait");
         pd.setMessage("Adding new User");
+        pd.setCancelable(false);
 
         adminEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
@@ -110,7 +111,7 @@ public class AddUserActivity extends AppCompatActivity {
         ref = ref.child(uid);
         ref.child(FIREBASE_REF_EMAIL).setValue(etEmail.getText().toString());
         ref.child(FIREBASE_REF_PHOTO).setValue(USER_DUMMY_IMAGE);
-        ref.child(FIREBASE_REF_NAME).setValue(etName.getText().toString());
+        ref.child(FIREBASE_REF_USERNAME).setValue(etName.getText().toString());
         ref.child(FIREBASE_REF_MOBILE).setValue(etPhone.getText().toString());
         ref.child(FIREBASE_REF_COLLEGE).setValue(etCollege.getText().toString());
         ref.child(FIREBASE_REF_COLLEGE_REG_ID).setValue(etRegId.getText().toString());

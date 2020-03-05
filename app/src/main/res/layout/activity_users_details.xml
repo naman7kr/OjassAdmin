@@ -70,7 +70,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="OjassID OJ18" />
+                    android:text="OjassID OJ20" />
 
                 <EditText
                     android:textSize="17sp"

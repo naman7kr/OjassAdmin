@@ -55,7 +55,7 @@ public class AdminListActivity extends AppCompatActivity {
                                                              ,ds.getKey());
                         data.setNo_access(ds.child(FIREBASE_REF_ACCESS).getChildrenCount());
                         if(data.uid.compareTo(FirebaseAuth.getInstance().getUid())!=0)
-                         list.add(data);
+                            list.add(data);
                     }
                     Collections.sort(list, new AdminListSorter());
                     mAdapter.notifyDataSetChanged();

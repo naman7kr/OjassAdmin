@@ -51,7 +51,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="OJ18"
+                android:text="OJ20"
                 android:layout_marginRight="5dp"
                 android:textStyle="bold"
                 android:textSize="20sp"/>
@@ -123,15 +123,10 @@
             android:id="@+id/ll_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:padding="5dp"
+            android:gravity="center"
             android:layout_marginTop="40dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Total Participants: "
-                android:textSize="16sp"/>
 
             <TextView
                 android:id="@+id/tv_total_participants"
@@ -140,6 +135,15 @@
                 tools:text="201"
                 android:textStyle="bold"
                 android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Click Here for\nTotal Participants"
+                android:textSize="16sp"/>
+
+
 
         </LinearLayout>
 

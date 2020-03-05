@@ -118,8 +118,8 @@ public class FeedsActivity extends AppCompatActivity {
         eventList.clear();
         eventList.addAll(Constants.eventNames);
         eventList.add(0,"Ojass");
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this,R.layout.spinner_item, eventList);
-        arrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item, eventList);
+//        arrayAdapter.setDropDownViewResource(R.layout.spinner_item);
         mEvent.setAdapter(arrayAdapter);
         mEvent.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -141,8 +141,8 @@ public class FeedsActivity extends AppCompatActivity {
         }else {
             subEventList.addAll(SubEventsMap.get(mEvent.getSelectedItem().toString()));
         }
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this,R.layout.spinner_item, subEventList);
-        arrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item, subEventList);
+//        arrayAdapter.setDropDownViewResource(R.layout.spinner_item);
         mSubevent.setAdapter(arrayAdapter);
     }
     private void validateAndPublish(){
